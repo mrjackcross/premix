@@ -25,7 +25,8 @@ var dispatcher = require('dispatcher'),
 
 
 var fxNode = null,
-    wavesurfers = {};
+    wavesurfers = {},
+    bufferSources = {};
 
 
 /**
@@ -66,16 +67,16 @@ function loadSample(trackData) {
  **/
 function playSample(trackHitData) {
 
-    var s = AUDIO.createBufferSource();
-    s.buffer = wavesurfers[trackHitData.trackId].backend.buffer;
+    bufferSources[trackHitData.trackId] = AUDIO.createBufferSource();
+    bufferSources[trackHitData.trackId].buffer = wavesurfers[trackHitData.trackId].backend.buffer;
 
     if (fxNode) {
-        s.connect(fxNode);
+        bufferSources[trackHitData.trackId].connect(fxNode);
         fxNode.connect(AUDIO.destination);
     } else {
-        s.connect(AUDIO.destination);
+        bufferSources[trackHitData.trackId].connect(AUDIO.destination);
     }
-    s.start(trackHitData.playTime || 0);
+    bufferSources[trackHitData.trackId].start(trackHitData.playTime || 0);
 
 }
 

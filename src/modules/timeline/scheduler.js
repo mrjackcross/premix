@@ -19,11 +19,21 @@ function trackAdded(trackInfo) {
 
 /**
  * Gets triggered when a track moves on the timeline
+ * Alters the track's start time and sets it's played
+ * flag to false if it's moved past the playhead
  *
  * @param trackInfo: info about the track that just moved
  **/
 function trackMoved(trackInfo) {
-    tracks[trackInfo.trackId].trackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
+    var newTrackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
+    var currentTime = AUDIO.currentTime;
+    currentTime -= startTime;
+
+    tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
+
+    if(newTrackStartTime > currentTime) {
+        tracks[trackInfo.trackId].played = false;
+    }
 }
 
 /**
@@ -98,9 +108,7 @@ function scheduleAudio() {
             var pt = track.trackStartTime + startTime;
             playAudioAtTime(key, pt);
         }
-
     }
-
     advanceStep(currentTime);
     ti = requestAnimationFrame(scheduleAudio);
 }
@@ -110,10 +118,14 @@ function scheduleAudio() {
  * looping back to the start if needed.
  **/
 function advanceStep(currentTime) {
-    if (currentTime >= 10.0) {
-        played = false;
+    if (currentTime >= PremixGlobals.getTotalTime()) {
+        for (var key in tracks) {
+            if (!tracks.hasOwnProperty(key)) continue;
+            tracks[key].played = false;
+        }
         startTime = AUDIO.currentTime;
     }
+
     dispatcher.trigger('timeline:stepchanged', currentTime);
 }
 

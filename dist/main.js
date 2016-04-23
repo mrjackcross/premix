@@ -14592,7 +14592,7 @@ var App = {
 
 
 module.exports = App;
-},{"../modules/browser":31,"../modules/keycontrols":33,"../modules/resizer":34,"../modules/samplebank":36,"../modules/timeline":37,"dispatcher":28}],28:[function(require,module,exports){
+},{"../modules/browser":33,"../modules/keycontrols":37,"../modules/resizer":38,"../modules/samplebank":40,"../modules/timeline":41,"dispatcher":28}],28:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     _ = require('underscore');
@@ -14636,10 +14636,42 @@ app.init();
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div class=\"module browser\">\n\n</div>";
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "<button type=\"button\" class=\"list-group-item browser-item\"\n        data-track-id=\""
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.trackId : stack1), depth0))
+    + "\"\n        data-url=\""
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.url : stack1), depth0))
+    + "\">\n    "
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.name : stack1), depth0))
+    + "\n</button>";
 },"useData":true});
 
 },{"hbsfy/runtime":21}],31:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<div class=\"module browser\">\n\n    <div id=\"browser-items\" class=\"list-group\">\n    </div>\n\n</div>";
+},"useData":true});
+
+},{"hbsfy/runtime":21}],32:[function(require,module,exports){
+// Library dependencies
+var Backbone = require('backbone'),
+    $ = require('jquery');
+
+// Inner dependencies
+var BrowserItemModel = require('./model.browser-item');
+
+var BrowserItemCollection = Backbone.Collection.extend({
+    model: BrowserItemModel
+});
+
+module.exports = BrowserItemCollection;
+},{"./model.browser-item":34,"backbone":1,"jquery":22}],33:[function(require,module,exports){
+// Library dependencies
+var Backbone = require('backbone'),
+    $ = require('jquery');
+
 // Application dependencies
 var dispatcher = require('dispatcher');
 
@@ -14652,6 +14684,7 @@ var BrowserView = require('./view.browser');
  **/
 function init(options) {
     console.log('Browser init');
+
     new BrowserView(options).render();
 }
 
@@ -14664,7 +14697,16 @@ var Browser = {
 }
 
 module.exports = Browser;
-},{"./view.browser":32,"dispatcher":28}],32:[function(require,module,exports){
+},{"./view.browser":36,"backbone":1,"dispatcher":28,"jquery":22}],34:[function(require,module,exports){
+// Library dependencies
+var Backbone = require('backbone'),
+    $ = require('jquery');
+
+var BrowserItemModel = Backbone.Model.extend({
+});
+
+module.exports = BrowserItemModel;
+},{"backbone":1,"jquery":22}],35:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     $ = require('jquery');
@@ -14673,28 +14715,116 @@ var Backbone = require('backbone'),
 var dispatcher = require('dispatcher');
 
 // Inner dependencies
-var _template = require('./browser.hbs');
+var _template = require('./browser-item.hbs');
 
-
-var BrowserView = Backbone.View.extend({
-
+var BrowserItemView = Backbone.View.extend({
+    events: {
+    },
+    model: null,
     initialize: function (options) {
+
+        this.model = options.model;
 
     },
     render: function () {
-        var rawHTML = _template({
 
+        console.log(this.model);
+
+        var rawHTML = _template({
+            model: this.model
         });
 
-        this.$el.html(rawHTML);
+        this.$el.append(rawHTML);
 
+        // Fetch will go here
         return this;
     }
 
 });
 
+module.exports = BrowserItemView;
+},{"./browser-item.hbs":30,"backbone":1,"dispatcher":28,"jquery":22}],36:[function(require,module,exports){
+// Library dependencies
+var Backbone = require('backbone'),
+    $ = require('jquery');
+
+// Application dependencies
+var dispatcher = require('dispatcher');
+
+// Inner dependencies
+var BrowserItemView = require('./view.browser-item'),
+    _template = require('./browser.hbs'),
+    BrowserItemModel = require('./model.browser-item'),
+    BrowserItemCollection = require('./collection.browser-item-list');
+
+var BrowserView = Backbone.View.extend({
+    events: {
+    },
+    initialize: function (options) {
+        var browserItem2 = new BrowserItemModel({
+            name: 'Kick',
+            trackId: 'kick',
+            url: 'assets/samples/kick.wav'
+        });
+        var browserItem1 = new BrowserItemModel({
+            name: 'Snare',
+            trackId: 'snare',
+            url: 'assets/samples/snare.wav'
+        });
+        var browserItem4 = new BrowserItemModel({
+            name: 'Closed HiHat',
+            trackId: 'closedhihat',
+            url: 'assets/samples/closedHat.wav'
+        });
+        var browserItem3 = new BrowserItemModel({
+            name: 'Open HiHat',
+            trackId: 'openhihat',
+            url: 'assets/samples/openHat.wav'
+        });
+        var browserItem5 = new BrowserItemModel({
+            name: 'Calibre - Gone Away',
+            trackId: 'dnb',
+            url: 'assets/samples/06-calibre-gone_away.mp3'
+        });
+
+        this.collection = new BrowserItemCollection([browserItem1, browserItem2, browserItem3, browserItem4, browserItem5]);
+        
+        this.collection.on('change', this.render, this);
+    },
+    render: function () {
+        var rawHTML = _template({
+        });
+
+        this.$el.html(rawHTML);
+
+        // Fetch will go here
+
+        var $iel = this.$el.find('#browser-items');
+
+        this.collection.each(function (model) {
+
+            var browserItemView = new BrowserItemView({
+                model: model,
+                el: $iel
+            });
+
+            // Render the item
+            browserItemView.render();
+
+        });
+
+        // Fetch will end here
+
+        return this;
+    },
+    buttonClicked: function (e) {
+
+    }
+
+});
+
 module.exports = BrowserView;
-},{"./browser.hbs":30,"backbone":1,"dispatcher":28,"jquery":22}],33:[function(require,module,exports){
+},{"./browser.hbs":31,"./collection.browser-item-list":32,"./model.browser-item":34,"./view.browser-item":35,"backbone":1,"dispatcher":28,"jquery":22}],37:[function(require,module,exports){
 // Library dependencies
 var $ = require('jquery'),
     _ = require('underscore');
@@ -14759,7 +14889,7 @@ var KeyControls = {
 };
 
 module.exports = KeyControls;
-},{"dispatcher":28,"jquery":22,"underscore":23}],34:[function(require,module,exports){
+},{"dispatcher":28,"jquery":22,"underscore":23}],38:[function(require,module,exports){
 // Application dependencies
 var dispatcher = require('dispatcher');
 
@@ -14784,7 +14914,7 @@ var Resizer = {
 }
 
 module.exports = Resizer;
-},{"./view.resizer":35,"dispatcher":28}],35:[function(require,module,exports){
+},{"./view.resizer":39,"dispatcher":28}],39:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     $ = require('jquery'),
@@ -14837,7 +14967,7 @@ var ResizerView = Backbone.View.extend({
 });
 
 module.exports = ResizerView;
-},{"backbone":1,"dispatcher":28,"jquery":22}],36:[function(require,module,exports){
+},{"backbone":1,"dispatcher":28,"jquery":22}],40:[function(require,module,exports){
 // Application dependencies
 var dispatcher = require('dispatcher'),
     AUDIO = require('../../common/audiocontext'),
@@ -14865,7 +14995,8 @@ var dispatcher = require('dispatcher'),
 
 
 var fxNode = null,
-    wavesurfers = {};
+    wavesurfers = {},
+    bufferSources = {};
 
 
 /**
@@ -14906,16 +15037,16 @@ function loadSample(trackData) {
  **/
 function playSample(trackHitData) {
 
-    var s = AUDIO.createBufferSource();
-    s.buffer = wavesurfers[trackHitData.trackId].backend.buffer;
+    bufferSources[trackHitData.trackId] = AUDIO.createBufferSource();
+    bufferSources[trackHitData.trackId].buffer = wavesurfers[trackHitData.trackId].backend.buffer;
 
     if (fxNode) {
-        s.connect(fxNode);
+        bufferSources[trackHitData.trackId].connect(fxNode);
         fxNode.connect(AUDIO.destination);
     } else {
-        s.connect(AUDIO.destination);
+        bufferSources[trackHitData.trackId].connect(AUDIO.destination);
     }
-    s.start(trackHitData.playTime || 0);
+    bufferSources[trackHitData.trackId].start(trackHitData.playTime || 0);
 
 }
 
@@ -14954,7 +15085,7 @@ var SampleBank = {
 };
 
 module.exports = SampleBank;
-},{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28,"wavesurfer.js":24}],37:[function(require,module,exports){
+},{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28,"wavesurfer.js":24}],41:[function(require,module,exports){
 // Application dependencies
 var dispatcher = require('dispatcher');
 
@@ -14989,7 +15120,7 @@ var Timeline = {
 }
 
 module.exports = Timeline;
-},{"./scheduler":38,"./view.timeline":41,"dispatcher":28}],38:[function(require,module,exports){
+},{"./scheduler":42,"./view.timeline":45,"dispatcher":28}],42:[function(require,module,exports){
 // Library dependencies
 var dispatcher = require('dispatcher');
 
@@ -15011,11 +15142,21 @@ function trackAdded(trackInfo) {
 
 /**
  * Gets triggered when a track moves on the timeline
+ * Alters the track's start time and sets it's played
+ * flag to false if it's moved past the playhead
  *
  * @param trackInfo: info about the track that just moved
  **/
 function trackMoved(trackInfo) {
-    tracks[trackInfo.trackId].trackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
+    var newTrackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
+    var currentTime = AUDIO.currentTime;
+    currentTime -= startTime;
+
+    tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
+
+    if(newTrackStartTime > currentTime) {
+        tracks[trackInfo.trackId].played = false;
+    }
 }
 
 /**
@@ -15090,9 +15231,7 @@ function scheduleAudio() {
             var pt = track.trackStartTime + startTime;
             playAudioAtTime(key, pt);
         }
-
     }
-
     advanceStep(currentTime);
     ti = requestAnimationFrame(scheduleAudio);
 }
@@ -15102,10 +15241,14 @@ function scheduleAudio() {
  * looping back to the start if needed.
  **/
 function advanceStep(currentTime) {
-    if (currentTime >= 10.0) {
-        played = false;
+    if (currentTime >= PremixGlobals.getTotalTime()) {
+        for (var key in tracks) {
+            if (!tracks.hasOwnProperty(key)) continue;
+            tracks[key].played = false;
+        }
         startTime = AUDIO.currentTime;
     }
+
     dispatcher.trigger('timeline:stepchanged', currentTime);
 }
 
@@ -15125,14 +15268,14 @@ var api = {
 
 module.exports = api;
 
-},{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28}],39:[function(require,module,exports){
+},{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28}],43:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"module timeline\" id=\"timeline\">\n    <div class=\"timeline-markers\">\n        <div class=\"timeline-marker\">0</div>\n        <div class=\"timeline-marker\">1</div>\n        <div class=\"timeline-marker\">2</div>\n        <div class=\"timeline-marker\">3</div>\n        <div class=\"timeline-marker\">4</div>\n        <div class=\"timeline-marker\">5</div>\n        <div class=\"timeline-marker\">6</div>\n        <div class=\"timeline-marker\">7</div>\n        <div class=\"timeline-marker\">8</div>\n        <div class=\"timeline-marker\">9</div>\n    </div>\n    <div id=\"playhead\"/>\n    <div id=\"timeline-tracks\">\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":21}],40:[function(require,module,exports){
+},{"hbsfy/runtime":21}],44:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -15143,7 +15286,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
     + "\">\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":21}],41:[function(require,module,exports){
+},{"hbsfy/runtime":21}],45:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     $ = require('jquery');
@@ -15223,7 +15366,7 @@ var TimelineView = Backbone.View.extend({
 });
 
 module.exports = TimelineView;
-},{"../../common/config":26,"./timeline.hbs":39,"./view.track":42,"backbone":1,"dispatcher":28,"jquery":22}],42:[function(require,module,exports){
+},{"../../common/config":26,"./timeline.hbs":43,"./view.track":46,"backbone":1,"dispatcher":28,"jquery":22}],46:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     $ = require('jquery'),
@@ -15270,7 +15413,7 @@ var TrackView = Backbone.View.extend({
     },
     onMouseDown: function (e) {
         if(e.currentTarget.id == this.trackId) {
-        this.dragging = true;
+            this.dragging = true;
         }
     },
     onResizerMouseMove: function (e) {
@@ -15314,6 +15457,6 @@ var TrackView = Backbone.View.extend({
 });
 
 module.exports = TrackView;
-},{"./scheduler":38,"./track.hbs":40,"backbone":1,"dispatcher":28,"jquery":22}]},{},[29]);
+},{"./scheduler":42,"./track.hbs":44,"backbone":1,"dispatcher":28,"jquery":22}]},{},[29]);
 
 //# sourceMappingURL=main.js.map

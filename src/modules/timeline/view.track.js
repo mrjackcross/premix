@@ -44,7 +44,7 @@ var TrackView = Backbone.View.extend({
     },
     onMouseDown: function (e) {
         if(e.currentTarget.id == this.trackId) {
-        this.dragging = true;
+            this.dragging = true;
         }
     },
     onResizerMouseMove: function (e) {
