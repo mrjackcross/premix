@@ -1,0 +1,29 @@
+{
+  "name": "modular-drum-app",
+  "version": "1.0.0",
+  "main": "./src/main.js",
+  "browser": {
+    "config": "./src/core/config.js",
+    "dispatcher": "./src/core/dispatcher.js"
+  },
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-util": "latest",
+    "gulp-sourcemaps": "latest",
+    "vinyl-buffer": "latest",
+    "vinyl-source-stream": "latest",
+    "browserify": "latest",
+    "watchify": "latest",
+    "handlebars": "latest",
+    "hbsfy": "latest"
+  },
+  "dependencies": {
+    "backbone": "latest",
+    "ejs": "^2.4.1",
+    "exorcist": "^0.4.0",
+    "express": "^4.13.4",
+    "jquery": "latest",
+    "underscore": "latest",
+    "wavesurfer.js": "latest"
+  }
+}
