@@ -14,11 +14,15 @@ var scheduler = require('./scheduler'),
  **/
 function init(options) {
     console.log('Timeline init');
-    new TimelineView(options).render();
+    
     dispatcher.on('timeline:toggleplay', scheduler.togglePlay);
     dispatcher.on('timeline:trackmoved', scheduler.trackMoved);
+    dispatcher.on('timeline:trackadded', scheduler.trackAdded);
+    
+    var timelineView = new TimelineView(options);
+    timelineView.render();
+    
 }
-
 
 /**
  * Exported module interface.

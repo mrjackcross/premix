@@ -2,15 +2,28 @@
 var dispatcher = require('dispatcher');
 
 // Application dependencies
-var AUDIO = require('../../common/audiocontext');
+var AUDIO = require('../../common/audiocontext'),
+    PremixGlobals = require('../../common/config');
 
 var startTime = 0;
 var isPlaying = false;
-var audioTime = 2.0;
-var played = false;
+var tracks = {};
 
+
+function trackAdded(trackInfo) {
+    tracks[trackInfo.trackId] = {
+        trackStartTime: PremixGlobals.pixelsToTime(trackInfo.xPos),
+        played: false
+    }
+}
+
+/**
+ * Gets triggered when a track moves on the timeline
+ *
+ * @param trackInfo: info about the track that just moved
+ **/
 function trackMoved(trackInfo) {
-    console.log("Scheduler Track Moved called " + JSON.stringify(trackInfo));
+    tracks[trackInfo.trackId].trackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
 }
 
 /**
@@ -19,10 +32,16 @@ function trackMoved(trackInfo) {
  *
  * @param pt: calculated time offset to delay the audio by
  **/
-function playAudioAtTime(pt) {
-    if(!played) {
-        dispatcher.trigger('timeline:audiohit', 'snare', pt);
-        played = true;
+function playAudioAtTime(trackId, pt) {
+    if(!tracks[trackId].played) {
+
+        var trackHitData = {
+            trackId: trackId,
+            playTime: pt
+        }
+        dispatcher.trigger('timeline:audiohit', trackHitData);
+
+        tracks[trackId].played = true;
     }
 }
 
@@ -41,7 +60,12 @@ function play() {
  **/
 function stop() {
     isPlaying = false;
-    played = false;
+
+    for (var key in tracks) {
+        if (!tracks.hasOwnProperty(key)) continue;
+        tracks[key].played = false;
+    }
+
     dispatcher.trigger('timeline:stepchanged', 0.0);
 }
 
@@ -66,10 +90,17 @@ function scheduleAudio() {
     var currentTime = AUDIO.currentTime;
     currentTime -= startTime;
 
-    if (audioTime < currentTime + 0.100) {
-        var pt = audioTime + startTime;
-        playAudioAtTime(pt);
+    for (var key in tracks) {
+        if (!tracks.hasOwnProperty(key)) continue;
+        var track = tracks[key];
+
+        if (track.trackStartTime < currentTime + PremixGlobals.getLookahead()) {
+            var pt = track.trackStartTime + startTime;
+            playAudioAtTime(key, pt);
+        }
+
     }
+
     advanceStep(currentTime);
     ti = requestAnimationFrame(scheduleAudio);
 }
@@ -93,6 +124,7 @@ function advanceStep(currentTime) {
  * the module to work with directly.
  **/
 var api = {
+    trackAdded: trackAdded,
     trackMoved: trackMoved,
     play: play,
     togglePlay: togglePlay,

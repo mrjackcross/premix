@@ -1,7 +1,8 @@
 // Application dependencies
 var dispatcher = require('dispatcher'),
     AUDIO = require('../../common/audiocontext'),
-    WaveSurfer = require('wavesurfer.js');
+    WaveSurfer = require('wavesurfer.js'),
+    PremixGlobals = require('../../common/config');
 
 
 /**
@@ -23,28 +24,8 @@ var dispatcher = require('dispatcher'),
  **/
 
 
-var bank = {},
-    fxNode = null,
-    wavesurfer = null;
-
-var loadCount = 0,
-    totalCount = 0;
-
-
-/**
- * Triggers a load on every item in an object of
- * sample sources.
- *
- * @param srcObj: object of id:srcpath pairs
- **/
-function loadSamples(srcObj) {
-    for (var k in srcObj) {
-        totalCount++;
-    }
-    for (var k in srcObj) {
-        _loadSample(k, srcObj[k]);
-    }
-}
+var fxNode = null,
+    wavesurfers = {};
 
 
 /**
@@ -54,22 +35,22 @@ function loadSamples(srcObj) {
  * @param key: string ID to store sample as
  * @param url: string path of sample source
  **/
-function _loadSample(key, url) {
+function loadSample(trackData) {
 
-    wavesurfer = WaveSurfer.create({
+    var wavesurfer = WaveSurfer.create({
         audioContext: AUDIO,
-        container: '#' + key,
+        container: '#' + trackData.trackId,
         interact: false,
         fillParent: false,
-        minPxPerSec: 120
+        minPxPerSec: PremixGlobals.getPixelsPerSecond()
     });
 
-    wavesurfer.load(url);
+    wavesurfers[trackData.trackId] = wavesurfer;
+
+    wavesurfer.load(trackData.url);
 
     wavesurfer.on('ready', function () {
-        if (++loadCount === totalCount) {
-            dispatcher.trigger('samplebank:ready');
-        }
+        dispatcher.trigger('samplebank:trackloaded', trackData.id);
     });
 
 }
@@ -83,10 +64,10 @@ function _loadSample(key, url) {
  * @param id: string ID of sample to play
  * @param when: int time (ms) after creation to play sound
  **/
-function playSample(id, when) {
+function playSample(trackHitData) {
 
     var s = AUDIO.createBufferSource();
-    s.buffer = wavesurfer.backend.buffer;
+    s.buffer = wavesurfers[trackHitData.trackId].backend.buffer;
 
     if (fxNode) {
         s.connect(fxNode);
@@ -94,7 +75,7 @@ function playSample(id, when) {
     } else {
         s.connect(AUDIO.destination);
     }
-    s.start(when || 0);
+    s.start(trackHitData.playTime || 0);
 
 }
 
@@ -116,11 +97,12 @@ function setFxNode(node) {
  *
  * @param srcObj: see loadSamples()
  **/
-function init(srcObj) {
+function init() {
     console.log('SampleBank init');
     dispatcher.on('samplebank:playsample', playSample);
     dispatcher.on('samplebank:setfxnode', setFxNode);
-    loadSamples(srcObj);
+    dispatcher.on('timeline:trackadded', loadSample);
+    dispatcher.trigger('samplebank:ready');
 }
 
 

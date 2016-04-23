@@ -9,6 +9,7 @@ var SampleBank = require('../modules/samplebank'),
     Timeline = require('../modules/timeline');
 
 
+
 /**
  * ------------------------------------------------------
  * Application core.  Initializes the various modules
@@ -67,6 +68,11 @@ function launchApp() {
         }
     });
 
+
+    Timeline.init({
+        el: document.getElementById('main-content')
+    });
+
     // Init the global view used to resize sections
     ResizerView.init({
         el: document
@@ -80,11 +86,7 @@ function launchApp() {
         el: document.getElementById('contextual-content-main')
     });
 
-    // Init the SampleBank, passing in the paths to our samples
-    var sampleSrcs = {
-        'snare': 'assets/samples/snare.wav'
-    };
-    SampleBank.init(sampleSrcs);
+
 
     console.log('Ready');
 }
@@ -100,11 +102,10 @@ var App = {
 
         // When the SampleBank has loaded all its samples, fire our
         // main application startup code
-        dispatcher.on('timeline:ready', launchApp);
-        
-        Timeline.init({
-            el: document.getElementById('main-content')
-        });
+        dispatcher.on('samplebank:ready', launchApp);
+
+        // Init the SampleBank
+        SampleBank.init();
     }
 }
 

@@ -12,9 +12,15 @@ var watchify = require('watchify');
 var browserify = require('browserify');
 var hbsfy = require('hbsfy');
 
+var nodemon     = require('gulp-nodemon');
+
 hbsfy.configure({
     extensions: ['hbs']
 });
+
+gulp.task('default', ['nodemon'], function () {
+});
+
 
 function bundle() {
     return bundler.transform(hbsfy)
@@ -32,4 +38,20 @@ bundler.add('./src/main.js');
 bundler.on('update', bundle);
 bundler.on('log', gutil.log);
 
-gulp.task('default', bundle); // run `gulp` to build & watch
+gulp.task('browserify', bundle);
+
+gulp.task('nodemon', ['browserify'],function (cb) {
+
+    var started = false;
+
+    return nodemon({
+        script: 'server.js'
+    }).on('start', function () {
+        // to avoid nodemon being started multiple times
+        // thanks @matthisk
+        if (!started) {
+            cb();
+            started = true;
+        }
+    });
+});

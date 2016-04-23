@@ -119,8 +119,6 @@ footer p {
 
 .track {
     position: absolute;
-    top: 15px;
-    left: 20%;
 
     background: -webkit-linear-gradient(#0086b3, #2255ff);
     background: linear-gradient(#0086b3, #2255ff);
@@ -129,5 +127,14 @@ footer p {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+}
 
+#kick{
+    top: 200px;
+    left: 10%;
+}
+
+#snare{
+    top: 15px;
+    left: 20%;
 }

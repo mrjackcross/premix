@@ -9,13 +9,15 @@ var scheduler = require('./scheduler'),
 
 var TrackView = Backbone.View.extend({
     events: {
-        'mousedown': 'onMouseDown'
+        'mousedown .track': 'onMouseDown'
     },
     $track: null,
     trackId: null,
+    url: null,
     dragging: false,
     initialize: function (options) {
         this.trackId = options.id;
+        this.url = options.url;
         this.listenTo(dispatcher, 'resizer:mouseup', this.onResizerMouseUp);
         this.listenTo(dispatcher, 'resizer:mousemove', this.onResizerMouseMove);
 
@@ -30,10 +32,20 @@ var TrackView = Backbone.View.extend({
 
         this.$track = this.$el.find("#" + this.trackId);
 
+        var trackData = {
+            trackId: this.trackId,
+            url: this.url,
+            xPos: this.$track.css("left").replace("px", "")
+        };
+
+        dispatcher.trigger('timeline:trackadded', trackData);
+
         return this;
     },
     onMouseDown: function (e) {
+        if(e.currentTarget.id == this.trackId) {
         this.dragging = true;
+        }
     },
     onResizerMouseMove: function (e) {
 
@@ -64,11 +76,12 @@ var TrackView = Backbone.View.extend({
     onResizerMouseUp: function(e) {
         if(this.dragging){
             this.dragging = false;
-            var data = {
+            
+            var trackData = {
                 trackId: this.trackId,
-                xPos: this.$track.css("left")
+                xPos: this.$track.css("left").replace("px", "")
             };
-            dispatcher.trigger('timeline:trackmoved', data);
+            dispatcher.trigger('timeline:trackmoved', trackData);
         }
     }
 
