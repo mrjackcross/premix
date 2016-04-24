@@ -5,13 +5,16 @@ var dispatcher = require('dispatcher');
 var AUDIO = require('../../common/audiocontext'),
     PremixGlobals = require('../../common/config');
 
-var startTime = 0.0;
-var isPlaying = false;
+// Variables
 var tracks = {};
-var pauseStart = 0.0;
-var pauseDuration = 0.0;
-var _initialized = false;
 
+var isPlaying,
+    _initialized = false;
+
+var startTime,
+    currentTime,
+    pauseStart,
+    pauseDuration = 0.0;
 
 function trackAdded(trackInfo) {
     tracks[trackInfo.trackId] = {
@@ -117,7 +120,7 @@ function togglePlay() {
  **/
 function scheduleAudio() {
     if (!isPlaying) return false;
-    var currentTime = AUDIO.currentTime;
+    currentTime = AUDIO.currentTime;
     currentTime -= startTime;
     currentTime -= pauseDuration;
 
