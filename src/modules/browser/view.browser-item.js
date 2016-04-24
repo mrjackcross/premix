@@ -41,8 +41,10 @@ var BrowserItemView = Backbone.View.extend({
     },
 
     dragStart: function (dataTransfer, e) {
-        return this.model.attributes;
-    } // override me, return data to be bound to drag
+        return {
+            type: 'browserItem',
+            model: this.model.attributes,
+        }    } // override me, return data to be bound to drag
 
 });
 

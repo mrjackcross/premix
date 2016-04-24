@@ -15,6 +15,7 @@ var TimelineView = Backbone.View.extend({
         'mouseup': 'onMouseUp'
     },
     uniqueId: 0,
+    trackViews: null,
     initialize: function (options) {
 
         this.collection = new TimelineTrackCollection();
@@ -34,22 +35,20 @@ var TimelineView = Backbone.View.extend({
         });
 
         this.$el.html(rawHTML);
-        
+
         this.$el.find('#timeline').css("width", PremixGlobals.getTimelineWidth());
 
         var $tel = this.$el.find('#timeline-tracks');
 
-        this.collection.each(function (model) {
 
+        this.trackViews = this.collection.map(function(model) {
             var trackView = new TrackView({
                 model: model,
                 el: $tel
             });
-
-            // Render the new track
-            trackView.render();
-
-        });
+            this.$el.append(trackView.render().el);
+            return trackView;
+        }, this);
 
         dispatcher.trigger('timeline:ready');
         return this;
@@ -63,39 +62,37 @@ var TimelineView = Backbone.View.extend({
     },
     addTrack: function(trackData){
 
-        // // Check for duplicates and append and index if so
-        // var existingTrackIds = {};
-        //
-        // var originalId = trackData.trackId;
-        // var uniqueTrackId;
-        //
-        // this.collection.each(function(model) {
-        //
-        //     var pos = model.attributes.trackId.lastIndexOf('-');
-        //     if(pos != -1) {
-        //         originalId = trackData.trackId.substring(0,pos);
-        //     }
-        //
-        //     if (existingTrackIds[originalId]) {
-        //         existingTrackIds[originalId] += existingTrackIds[originalId];
-        //     } else {
-        //         existingTrackIds[originalId] = 1;
-        //     }
-        // });
-        //
-        // if(existingTrackIds[originalId]) {
-        //     uniqueTrackId = originalId + '-' + existingTrackIds[originalId];
-        // }
-
         var track = new TimelineTrackModel({
             name: trackData.name,
-            trackId: trackData.trackId + this.uniqueId++,
+            trackId: trackData.trackId + '-' + this.uniqueId++,
             url: trackData.url,
             yPos: trackData.yPos,
-            startTime: trackData.startTime
+            trackStartTime: trackData.startTime
         });
 
         this.collection.add(track);
+    },
+    trackMoved: function(trackMoveData) {
+
+        this.trackViews.forEach(function(trackView){
+
+            if(trackView.model.attributes.trackId === trackMoveData.trackId) {
+
+                trackView.model.set({
+                    trackStartTime: trackMoveData.startTime,
+                    yPos: trackMoveData.yPos
+                });
+
+                trackView.render();
+            }
+
+        });
+
+        var trackData = {
+            trackId: trackMoveData.trackId,
+            xPos: PremixGlobals.timeToPixels(trackMoveData.startTime)
+        };
+        dispatcher.trigger('timeline:trackmoved', trackData);
     },
     _dragOverEvent: function (e) {
         if (e.originalEvent) e = e.originalEvent
@@ -147,10 +144,20 @@ var TimelineView = Backbone.View.extend({
 
     drop: function (data, dataTransfer, e) {
 
-        //TODO If this is a browser item
-        data.yPos = e.pageY;
-        data.startTime = PremixGlobals.pixelsToTime(e.pageX);
-        this.addTrack(data);
+        switch(data.type) {
+            case 'browserItem':
+                data.model.yPos = e.clientY - this.$el.offset().top;
+                data.model.startTime = PremixGlobals.pixelsToTime(e.clientX + this.$el.scrollLeft());
+                this.addTrack(data.model);
+                break;
+            case 'timelineTrack':
+                data.model.yPos = e.clientY - this.$el.offset().top;
+                data.model.startTime = PremixGlobals.pixelsToTime(e.clientX + this.$el.scrollLeft());
+                this.trackMoved(data.model);
+                break;
+            default:
+            // Do nothing
+        }
 
     } // overide me!  if the draggable class returned some data on 'dragStart' it will be the first argument
 

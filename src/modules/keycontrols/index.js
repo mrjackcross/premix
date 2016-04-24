@@ -21,7 +21,7 @@ var dispatcher = require('dispatcher');
 // Object of recognized keys
 var KEYS = {
     'PAUSE_RESUME': 32, // Space
-    'CLEAR': 27, // Esc
+    'RESET': 13, // Enter
     'TOGGLE_FILTER': 70 // f
 };
 

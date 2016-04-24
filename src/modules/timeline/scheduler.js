@@ -5,14 +5,17 @@ var dispatcher = require('dispatcher');
 var AUDIO = require('../../common/audiocontext'),
     PremixGlobals = require('../../common/config');
 
-var startTime = 0;
+var startTime = 0.0;
 var isPlaying = false;
 var tracks = {};
+var pauseStart = 0.0;
+var pauseDuration = 0.0;
+var _initialized = false;
 
 
 function trackAdded(trackInfo) {
     tracks[trackInfo.trackId] = {
-        trackStartTime: PremixGlobals.pixelsToTime(trackInfo.xPos),
+        trackStartTime: trackInfo.trackStartTime,
         played: false
     }
 }
@@ -26,10 +29,8 @@ function trackAdded(trackInfo) {
  **/
 function trackMoved(trackInfo) {
     var newTrackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
-    var currentTime = AUDIO.currentTime;
-    currentTime -= startTime;
 
-    tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
+      tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
 
     if(newTrackStartTime > currentTime) {
         tracks[trackInfo.trackId].played = false;
@@ -60,7 +61,14 @@ function playAudioAtTime(trackId, pt) {
  **/
 function play() {
     isPlaying = true;
-    startTime = AUDIO.currentTime + 0.005;
+
+    if(!_initialized) {
+        startTime = AUDIO.currentTime;
+        _initialized = true;
+    } else {
+        pauseDuration += (AUDIO.currentTime - pauseStart);
+    }
+
     scheduleAudio();
 }
 
@@ -69,6 +77,18 @@ function play() {
  * Stops playing.
  **/
 function stop() {
+    isPlaying = false;
+    pauseStart = AUDIO.currentTime;
+    dispatcher.trigger('timeline:paused');
+
+}
+
+function reset() {
+
+    startTime = 0.0;
+    pauseStart = 0.0;
+    pauseDuration = 0.0;
+    _initialized = false;
     isPlaying = false;
 
     for (var key in tracks) {
@@ -99,6 +119,7 @@ function scheduleAudio() {
     if (!isPlaying) return false;
     var currentTime = AUDIO.currentTime;
     currentTime -= startTime;
+    currentTime -= pauseDuration;
 
     for (var key in tracks) {
         if (!tracks.hasOwnProperty(key)) continue;
@@ -110,7 +131,7 @@ function scheduleAudio() {
         }
     }
     advanceStep(currentTime);
-    ti = requestAnimationFrame(scheduleAudio);
+    requestAnimationFrame(scheduleAudio);
 }
 
 /**
@@ -119,13 +140,10 @@ function scheduleAudio() {
  **/
 function advanceStep(currentTime) {
     if (currentTime >= PremixGlobals.getTotalTime()) {
-        for (var key in tracks) {
-            if (!tracks.hasOwnProperty(key)) continue;
-            tracks[key].played = false;
-        }
-        startTime = AUDIO.currentTime;
+        reset();
+        play();
+        dispatcher.trigger('timeline:looped');
     }
-
     dispatcher.trigger('timeline:stepchanged', currentTime);
 }
 
@@ -140,7 +158,8 @@ var api = {
     trackMoved: trackMoved,
     play: play,
     togglePlay: togglePlay,
-    stop: stop
+    stop: stop,
+    reset: reset
 };
 
 module.exports = api;

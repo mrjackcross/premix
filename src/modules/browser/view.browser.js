@@ -32,13 +32,51 @@ var BrowserView = Backbone.View.extend({
             url: 'assets/samples/openHat.wav'
         });
         var browserItem5 = new BrowserItemModel({
+            name: 'Trolley Snatcha - The Future',
+            trackId: 'trolley-snatcher',
+            url: 'assets/samples/trolley-snatcher.mp3'
+        });
+        var browserItem6 = new BrowserItemModel({
+            name: 'RedEye',
+            trackId: 'red-eye',
+            url: 'assets/samples/redeye.mp3'
+        });
+        var browserItem7 = new BrowserItemModel({
+            name: 'Trust Nobody',
+            trackId: 'trust-nobody',
+            url: 'assets/samples/trustnobody.mp3'
+        });
+        var browserItem8 = new BrowserItemModel({
+            name: 'Downlink - Gamma Ray',
+            trackId: 'downlink',
+            url: 'assets/samples/downlink.mp3'
+        });
+        var browserItem9 = new BrowserItemModel({
+            name: 'Open HiHat',
+            trackId: 'openhihat',
+            url: 'assets/samples/openHat.wav'
+        });
+        var browserItem10 = new BrowserItemModel({
             name: 'Calibre - Gone Away',
             trackId: 'dnb',
             url: 'assets/samples/06-calibre-gone_away.mp3'
         });
 
-        this.collection = new BrowserItemCollection([browserItem1, browserItem2, browserItem3, browserItem4, browserItem5]);
-        
+
+
+        this.collection = new BrowserItemCollection([
+            browserItem6,
+            browserItem7,
+            browserItem8,
+            browserItem9,
+            browserItem5,
+            browserItem10,
+            browserItem2,
+            browserItem3,
+            browserItem4,
+            browserItem1]
+        );
+
         this.collection.on('change', this.render, this);
 
         // Fetch will go here

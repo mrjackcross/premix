@@ -1,7 +1,8 @@
 // Application dependencies
 var dispatcher = require('dispatcher'),
     AUDIO = require('../../common/audiocontext'),
-    WaveSurfer = require('wavesurfer.js'),
+    WaveSurfer = require('../../../lib/wavesurfer.js-master/dist/wavesurfer.min.js'),
+    //WaveSurfer = require('wavesurfer.min.js'),
     PremixGlobals = require('../../common/config');
 
 
@@ -25,9 +26,7 @@ var dispatcher = require('dispatcher'),
 
 
 var fxNode = null,
-    wavesurfers = {},
-    bufferSources = {};
-
+    wavesurfers = {};
 
 /**
  * Loads a sample via XHR and triggers a 'ready' event if
@@ -56,6 +55,7 @@ function loadSample(trackData) {
 
 }
 
+
 /**
  * Triggers a sample to play by creating a new source node
  * and wiring it (via an FX node, if present) to the
@@ -67,23 +67,40 @@ function loadSample(trackData) {
  **/
 function playSample(trackHitData) {
 
-    // Stop the buffer if it's already playing
-    // if(bufferSources[trackHitData.trackId]) {
-    //     bufferSources[trackHitData.trackId].stop();
-    // }
+    wavesurfers[trackHitData.trackId].play(trackHitData.playTime || 0);
 
-    bufferSources[trackHitData.trackId] = AUDIO.createBufferSource();
-    bufferSources[trackHitData.trackId].buffer = wavesurfers[trackHitData.trackId].backend.buffer;
+    //_playSampleDelayed(trackHitData);
+}
 
+// function _playSampleDelayed(trackHitData) {
+//     requestAnimationFrame(function () {
+//
+//         if(AUDIO.currentTime >= trackHitData.playTime) {
+//             wavesurfers[trackHitData.trackId].play();
+//
+//             console.log("latency = " + (AUDIO.currentTime - trackHitData.playTime) * 1000 + "ms");
+//
+//         } else {
+//             _playSampleDelayed(trackHitData);
+//         }
+//
+//     });
+// }
 
-    if (fxNode) {
-        bufferSources[trackHitData.trackId].connect(fxNode);
-        fxNode.connect(AUDIO.destination);
-    } else {
-        bufferSources[trackHitData.trackId].connect(AUDIO.destination);
+function stopSamples() {
+    for (var i in wavesurfers) {
+        if (wavesurfers.hasOwnProperty(i)) {
+            wavesurfers[i].stop();
+        }
     }
-    bufferSources[trackHitData.trackId].start(trackHitData.playTime || 0);
+}
 
+function playPauseSamples() {
+    for (var i in wavesurfers) {
+        if (wavesurfers.hasOwnProperty(i)) {
+            wavesurfers[i].pause();
+        }
+    }
 }
 
 
@@ -107,6 +124,8 @@ function setFxNode(node) {
 function init() {
     console.log('SampleBank init');
     dispatcher.on('samplebank:playsample', playSample);
+    dispatcher.on('samplebank:stopsamples', stopSamples);
+    dispatcher.on('samplebank:playpausesamples', playPauseSamples);
     dispatcher.on('samplebank:setfxnode', setFxNode);
     dispatcher.on('timeline:trackadded', loadSample);
     dispatcher.trigger('samplebank:ready');

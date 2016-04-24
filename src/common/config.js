@@ -7,8 +7,8 @@
 
 
 var PremixGlobals = {
-    totalTime: 1800.0,
-    pixelsPerSecond: 1.5,
+    totalTime: 10.0,
+    pixelsPerSecond: 200,
     lookahead: 0.100,
     getTotalTime: function () {
         return this.totalTime;

@@ -1,7 +1,3 @@
-
-
-    
-
 var BrowserItemModel = Backbone.Model.extend({
 });
 

@@ -51,8 +51,10 @@ function launchApp() {
 
     // Bind some connecting events to 'wire up' our modules
     proxyEvents({
-        // PatternGrid note trigger -> SampleBank play sound
-        'timeline:audiohit': 'samplebank:playsample'
+        'timeline:audiohit': 'samplebank:playsample',
+        'timeline:paused': 'samplebank:pausesamples',
+        'timeline:stopped': 'samplebank:stopsamples',
+        'timeline:looped': 'samplebank:stopsamples'
     });
 
     // Handle keypress events from KeyControls and trigger
@@ -61,6 +63,9 @@ function launchApp() {
         switch (key) {
             case 'PAUSE_RESUME':
                 dispatcher.trigger('timeline:toggleplay')
+                break;
+            case 'RESET':
+                dispatcher.trigger('timeline:reset')
                 break;
             default:
                 break;
