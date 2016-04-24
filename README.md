@@ -10,10 +10,10 @@ Alternatively you can run the repo from within a regular *AMP setup.
 
 ## Editing
 
-Install [Node](https://nodejs.org/) and [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md).
+Install [Node](https://nodejs.org/)
 
-Run `npm install` from the root.  This will install Browserify, Backbone and all other dependencies.
+Run `npm install` from the root.  This will install all dependencies.
 
-Run `gulp` from the root to build the JavaScript and start a watcher that will re-build if the files change.  JavaScript is bundled and output to the `dist` directory.
+Run `webpack --watch` from the root to build the JavaScript and start a watcher that will re-build if the files change.  JavaScript is bundled and output to the `public` directory.
 
 

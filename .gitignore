@@ -1,3 +1,4 @@
 node_modules/
 .idea/
 /assets/samples/06-calibre-gone_away.mp3
+/*.iml
