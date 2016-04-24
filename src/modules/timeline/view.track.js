@@ -1,7 +1,5 @@
 // Library dependencies
-var Backbone = require('backbone'),
-    $ = require('jquery'),
-    dispatcher = require('dispatcher');
+var dispatcher = require('dispatcher');
 
 // Application dependencies
 var PremixGlobals = require('../../common/config');

@@ -1,8 +1,3 @@
-// Library dependencies
-var Backbone = require('backbone'),
-    _ = require('underscore');
-
-
 /**
  * ------------------------------------------------------
  * Dispatcher/event bus.  Provides pubsub capabilities
@@ -12,7 +7,6 @@ var Backbone = require('backbone'),
  * we're passing around the same dispatcher every time.
  * ------------------------------------------------------
  **/
-
 
 // Export our own clone of Backbone's internal Events object
 // for simple pubsub functionality

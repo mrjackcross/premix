@@ -1,7 +1,7 @@
-// Hook up jQuery to Backbone globally
-var Backbone = require('backbone'),
-    $ = require('jquery');
-Backbone.$ = $;
+// Stylesheets
+require('../styles/bootstrap-3.3.6-dist/css/bootstrap.min.css');
+require('../styles/normalize.css');
+require('../styles/main.css');
 
 // Application dependencies
 var app = require('./core/app');
@@ -9,8 +9,6 @@ var app = require('./core/app');
 /**
  * ------------------------------------------------------
  * Application entrypoint.
- * Browserify starts bundling from here, and this is the
- * first bit of code executed in our app.
  * ------------------------------------------------------
  **/
 

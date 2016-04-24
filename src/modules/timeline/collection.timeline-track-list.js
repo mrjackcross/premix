@@ -1,7 +1,3 @@
-// Library dependencies
-var Backbone = require('backbone'),
-    $ = require('jquery');
-
 // Inner dependencies
 var TimelineTrackModel = require('./model.timeline-track');
 

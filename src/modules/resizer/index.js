@@ -13,7 +13,6 @@ function init(options) {
     new ResizerView(options).render();
 }
 
-
 /**
  * Exported module interface.
  **/

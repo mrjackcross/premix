@@ -1,7 +1,3 @@
-// Library dependencies
-var $ = require('jquery'),
-    _ = require('underscore');
-
 // Application dependencies
 var dispatcher = require('dispatcher');
 

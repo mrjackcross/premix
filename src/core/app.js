@@ -9,7 +9,6 @@ var SampleBank = require('../modules/samplebank'),
     Timeline = require('../modules/timeline');
 
 
-
 /**
  * ------------------------------------------------------
  * Application core.  Initializes the various modules

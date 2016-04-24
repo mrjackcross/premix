@@ -7,15 +7,22 @@
     "dispatcher": "./src/core/dispatcher.js"
   },
   "devDependencies": {
+    "browserify": "latest",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
     "gulp": "latest",
-    "gulp-util": "latest",
     "gulp-sourcemaps": "latest",
+    "gulp-util": "latest",
+    "handlebars": "latest",
+    "handlebars-loader": "^1.2.0",
+    "hbsfy": "latest",
+    "less": "^2.6.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "vinyl-buffer": "latest",
     "vinyl-source-stream": "latest",
-    "browserify": "latest",
-    "watchify": "latest",
-    "handlebars": "latest",
-    "hbsfy": "latest"
+    "watchify": "latest"
   },
   "dependencies": {
     "backbone": "latest",

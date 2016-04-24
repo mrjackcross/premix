@@ -1,7 +1,5 @@
-// Library dependencies
-var Backbone = require('backbone'),
-    $ = require('jquery'),
-    dispatcher = require('dispatcher');
+// Application dependencies
+var dispatcher = require('dispatcher');
 
 var ResizerView = Backbone.View.extend({
     dragging: false,

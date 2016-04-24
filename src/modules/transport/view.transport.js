@@ -1,7 +1,3 @@
-// Library dependencies
-var Backbone = require('backbone'),
-    $ = require('jquery');
-
 // Application dependencies
 var dispatcher = require('dispatcher');
 
