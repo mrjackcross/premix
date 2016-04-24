@@ -21,7 +21,7 @@ body {
 #main-content {
     position: absolute;
     top: 70px;
-    bottom: 70px;
+    bottom: 285px; /* this should always be 50px more than #contextual-content.height */
     left: 0px;
     right: 0px;
     overflow: scroll;
@@ -32,7 +32,7 @@ body {
     bottom: 50px;
     left: 0px;
     right: 0px;
-    height: 20px;
+    height: 235px;
     overflow-x: hidden;
     overflow-y: scroll;
 
@@ -137,4 +137,14 @@ footer p {
 #snare{
     top: 15px;
     left: 20%;
+}
+
+/** Browser **/
+
+.browser-item {
+    width: auto !important;
+}
+
+.ghost {
+    opacity: 0.5;
 }

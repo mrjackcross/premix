@@ -14454,8 +14454,8 @@ module.exports = AUDIO;
 
 
 var PremixGlobals = {
-    totalTime: 10.0,
-    pixelsPerSecond: 200,
+    totalTime: 1800.0,
+    pixelsPerSecond: 1.5,
     lookahead: 0.100,
     getTotalTime: function () {
         return this.totalTime;
@@ -14592,7 +14592,7 @@ var App = {
 
 
 module.exports = App;
-},{"../modules/browser":33,"../modules/keycontrols":37,"../modules/resizer":38,"../modules/samplebank":40,"../modules/timeline":41,"dispatcher":28}],28:[function(require,module,exports){
+},{"../modules/browser":33,"../modules/keycontrols":37,"../modules/resizer":38,"../modules/samplebank":40,"../modules/timeline":42,"dispatcher":28}],28:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     _ = require('underscore');
@@ -14638,7 +14638,9 @@ var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "<button type=\"button\" class=\"list-group-item browser-item\"\n        data-track-id=\""
+  return "<button type=\"button\" class=\"list-group-item browser-item\" id=\"browser-item-"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.trackId : stack1), depth0))
+    + "\"\n        data-track-id=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.trackId : stack1), depth0))
     + "\"\n        data-url=\""
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.url : stack1), depth0))
@@ -14709,7 +14711,8 @@ module.exports = BrowserItemModel;
 },{"backbone":1,"jquery":22}],35:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
-    $ = require('jquery');
+    $ = require('jquery'),
+    _ = require('underscore');
 
 // Application dependencies
 var dispatcher = require('dispatcher');
@@ -14721,14 +14724,11 @@ var BrowserItemView = Backbone.View.extend({
     events: {
     },
     model: null,
+    $browserItem: null,
     initialize: function (options) {
-
         this.model = options.model;
-
     },
     render: function () {
-
-        console.log(this.model);
 
         var rawHTML = _template({
             model: this.model
@@ -14736,14 +14736,34 @@ var BrowserItemView = Backbone.View.extend({
 
         this.$el.append(rawHTML);
 
+        this.$browserItem = this.$el.find("#browser-item-" + this.model.attributes.trackId);
+
+        this.$browserItem.attr("draggable", "true");
+        this.$browserItem.bind("dragstart", _.bind(this._dragStartEvent, this));
+
         // Fetch will go here
         return this;
-    }
+    },
+    _dragStartEvent: function (e) {
+        var data
+        if (e.originalEvent) e = e.originalEvent;
+        e.dataTransfer.effectAllowed = "copy"; // default to copy
+        data = this.dragStart(e.dataTransfer, e);
+
+        window._backboneDragDropObject = null;
+        if (data !== undefined) {
+            window._backboneDragDropObject = data;// we cant bind an object directly because it has to be a string, json just won't do
+        }
+    },
+
+    dragStart: function (dataTransfer, e) {
+        return this.model.attributes;
+    } // override me, return data to be bound to drag
 
 });
 
 module.exports = BrowserItemView;
-},{"./browser-item.hbs":30,"backbone":1,"dispatcher":28,"jquery":22}],36:[function(require,module,exports){
+},{"./browser-item.hbs":30,"backbone":1,"dispatcher":28,"jquery":22,"underscore":23}],36:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     $ = require('jquery');
@@ -14790,14 +14810,14 @@ var BrowserView = Backbone.View.extend({
         this.collection = new BrowserItemCollection([browserItem1, browserItem2, browserItem3, browserItem4, browserItem5]);
         
         this.collection.on('change', this.render, this);
+
+        // Fetch will go here
     },
     render: function () {
         var rawHTML = _template({
         });
 
         this.$el.html(rawHTML);
-
-        // Fetch will go here
 
         var $iel = this.$el.find('#browser-items');
 
@@ -14812,8 +14832,6 @@ var BrowserView = Backbone.View.extend({
             browserItemView.render();
 
         });
-
-        // Fetch will end here
 
         return this;
     },
@@ -15021,7 +15039,7 @@ function loadSample(trackData) {
     wavesurfer.load(trackData.url);
 
     wavesurfer.on('ready', function () {
-        dispatcher.trigger('samplebank:trackloaded', trackData.id);
+        dispatcher.trigger('samplebank:trackloaded', trackData.trackId);
     });
 
 }
@@ -15037,8 +15055,14 @@ function loadSample(trackData) {
  **/
 function playSample(trackHitData) {
 
+    // Stop the buffer if it's already playing
+    // if(bufferSources[trackHitData.trackId]) {
+    //     bufferSources[trackHitData.trackId].stop();
+    // }
+
     bufferSources[trackHitData.trackId] = AUDIO.createBufferSource();
     bufferSources[trackHitData.trackId].buffer = wavesurfers[trackHitData.trackId].backend.buffer;
+
 
     if (fxNode) {
         bufferSources[trackHitData.trackId].connect(fxNode);
@@ -15086,6 +15110,19 @@ var SampleBank = {
 
 module.exports = SampleBank;
 },{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28,"wavesurfer.js":24}],41:[function(require,module,exports){
+// Library dependencies
+var Backbone = require('backbone'),
+    $ = require('jquery');
+
+// Inner dependencies
+var TimelineTrackModel = require('./model.timeline-track');
+
+var TimelineTrackCollection = Backbone.Collection.extend({
+    model: TimelineTrackModel
+});
+
+module.exports = TimelineTrackCollection;
+},{"./model.timeline-track":43,"backbone":1,"jquery":22}],42:[function(require,module,exports){
 // Application dependencies
 var dispatcher = require('dispatcher');
 
@@ -15120,7 +15157,16 @@ var Timeline = {
 }
 
 module.exports = Timeline;
-},{"./scheduler":42,"./view.timeline":45,"dispatcher":28}],42:[function(require,module,exports){
+},{"./scheduler":44,"./view.timeline":47,"dispatcher":28}],43:[function(require,module,exports){
+// Library dependencies
+var Backbone = require('backbone'),
+    $ = require('jquery');
+
+var TimelineTrackModel = Backbone.Model.extend({
+});
+
+module.exports = TimelineTrackModel;
+},{"backbone":1,"jquery":22}],44:[function(require,module,exports){
 // Library dependencies
 var dispatcher = require('dispatcher');
 
@@ -15268,28 +15314,29 @@ var api = {
 
 module.exports = api;
 
-},{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28}],43:[function(require,module,exports){
+},{"../../common/audiocontext":25,"../../common/config":26,"dispatcher":28}],45:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div class=\"module timeline\" id=\"timeline\">\n    <div class=\"timeline-markers\">\n        <div class=\"timeline-marker\">0</div>\n        <div class=\"timeline-marker\">1</div>\n        <div class=\"timeline-marker\">2</div>\n        <div class=\"timeline-marker\">3</div>\n        <div class=\"timeline-marker\">4</div>\n        <div class=\"timeline-marker\">5</div>\n        <div class=\"timeline-marker\">6</div>\n        <div class=\"timeline-marker\">7</div>\n        <div class=\"timeline-marker\">8</div>\n        <div class=\"timeline-marker\">9</div>\n    </div>\n    <div id=\"playhead\"/>\n    <div id=\"timeline-tracks\">\n    </div>\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":21}],44:[function(require,module,exports){
+},{"hbsfy/runtime":21}],46:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var stack1;
 
   return "<div class=\"track\" id=\""
-    + container.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"id","hash":{},"data":data}) : helper)))
+    + container.escapeExpression(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.model : depth0)) != null ? stack1.attributes : stack1)) != null ? stack1.trackId : stack1), depth0))
     + "\">\n</div>";
 },"useData":true});
 
-},{"hbsfy/runtime":21}],45:[function(require,module,exports){
+},{"hbsfy/runtime":21}],47:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
-    $ = require('jquery');
+    $ = require('jquery'),
+    _ = require('underscore');
 
 // Application dependencies
 var dispatcher = require('dispatcher'),
@@ -15297,7 +15344,9 @@ var dispatcher = require('dispatcher'),
 
 // Inner dependencies
 var TrackView = require('./view.track'),
-    _template = require('./timeline.hbs');
+    _template = require('./timeline.hbs'),
+    TimelineTrackModel = require('./model.timeline-track'),
+    TimelineTrackCollection = require('./collection.timeline-track-list');
 
 
 var TimelineView = Backbone.View.extend({
@@ -15305,9 +15354,19 @@ var TimelineView = Backbone.View.extend({
         'mousemove': 'onMouseMove',
         'mouseup': 'onMouseUp'
     },
-    trackViews: {},
+    uniqueId: 0,
     initialize: function (options) {
+
+        this.collection = new TimelineTrackCollection();
+        this.listenTo( this.collection, 'add', this.render );
+
         this.listenTo(dispatcher, 'timeline:stepchanged', this.stepChanged);
+
+        this.$el.bind("dragover", _.bind(this._dragOverEvent, this));
+        this.$el.bind("dragenter", _.bind(this._dragEnterEvent, this));
+        this.$el.bind("dragleave", _.bind(this._dragLeaveEvent, this));
+        this.$el.bind("drop", _.bind(this._dropEvent, this));
+        this._draghoverClassAdded = false
     },
     render: function () {
         var rawHTML = _template({
@@ -15318,59 +15377,134 @@ var TimelineView = Backbone.View.extend({
         
         this.$el.find('#timeline').css("width", PremixGlobals.getTimelineWidth());
 
-        this.addTrack('kick', 'assets/samples/kick.wav');
-        this.addTrack('snare', 'assets/samples/snare.wav');
-        this.addTrack('snare', 'assets/samples/snare.wav');
-        
+        var $tel = this.$el.find('#timeline-tracks');
+
+        this.collection.each(function (model) {
+
+            var trackView = new TrackView({
+                model: model,
+                el: $tel
+            });
+
+            // Render the new track
+            trackView.render();
+
+        });
+
         dispatcher.trigger('timeline:ready');
         return this;
     },
     stepChanged: function (currentTime) {
-        
+
+        // Move the playhead
         var playHeadXOffset = PremixGlobals.timeToPixels(currentTime);
 
         this.$el.find("#playhead").css("left", playHeadXOffset + "px");
     },
-    addTrack: function(trackId, url){
+    addTrack: function(trackData){
 
-        var $tel = this.$el.find('#timeline-tracks');
-        var existingTrackIds = {};
+        // // Check for duplicates and append and index if so
+        // var existingTrackIds = {};
+        //
+        // var originalId = trackData.trackId;
+        // var uniqueTrackId;
+        //
+        // this.collection.each(function(model) {
+        //
+        //     var pos = model.attributes.trackId.lastIndexOf('-');
+        //     if(pos != -1) {
+        //         originalId = trackData.trackId.substring(0,pos);
+        //     }
+        //
+        //     if (existingTrackIds[originalId]) {
+        //         existingTrackIds[originalId] += existingTrackIds[originalId];
+        //     } else {
+        //         existingTrackIds[originalId] = 1;
+        //     }
+        // });
+        //
+        // if(existingTrackIds[originalId]) {
+        //     uniqueTrackId = originalId + '-' + existingTrackIds[originalId];
+        // }
 
-        // Check for duplicates and append and index if so
-        for (var key in this.trackViews) {
-            if (!this.trackViews.hasOwnProperty(key)) continue;
-            var trackView = this.trackViews[key];
-
-            if(existingTrackIds[trackView.id]) {
-                existingTrackIds[trackView.id] += existingTrackIds[trackView.id]
-            } else {
-                existingTrackIds[trackView.id] = 1;
-            }
-        }
-
-        if(existingTrackIds[trackId]) {
-            trackId += '-' + existingTrackIds[trackId];
-        }
-
-        var trackView = new TrackView({
-            id: trackId,
-            url: url,
-            el: $tel
+        var track = new TimelineTrackModel({
+            name: trackData.name,
+            trackId: trackData.trackId + this.uniqueId++,
+            url: trackData.url,
+            yPos: trackData.yPos,
+            startTime: trackData.startTime
         });
-        this.trackViews[trackId] = trackView;
 
-        // Render the new track
-        trackView.render();
-    }
+        this.collection.add(track);
+    },
+    _dragOverEvent: function (e) {
+        if (e.originalEvent) e = e.originalEvent
+        var data = this._getCurrentDragData(e)
+
+        if (this.dragOver(data, e.dataTransfer, e) !== false) {
+            if (e.preventDefault) e.preventDefault()
+            e.dataTransfer.dropEffect = 'copy' // default
+        }
+    },
+
+    _dragEnterEvent: function (e) {
+        if (e.originalEvent) e = e.originalEvent
+        if (e.preventDefault) e.preventDefault()
+    },
+
+    _dragLeaveEvent: function (e) {
+        if (e.originalEvent) e = e.originalEvent
+        var data = this._getCurrentDragData(e)
+        this.dragLeave(data, e.dataTransfer, e)
+    },
+
+    _dropEvent: function (e) {
+        if (e.originalEvent) e = e.originalEvent
+        var data = this._getCurrentDragData(e)
+
+        if (e.preventDefault) e.preventDefault()
+        if (e.stopPropagation) e.stopPropagation() // stops the browser from redirecting
+
+        if (this._draghoverClassAdded) this.$el.removeClass("draghover")
+
+        this.drop(data, e.dataTransfer, e)
+    },
+
+    _getCurrentDragData: function (e) {
+        var data = null
+        if (window._backboneDragDropObject) data = window._backboneDragDropObject
+        return data
+    },
+
+    dragOver: function (data, dataTransfer, e) { // optionally override me and set dataTransfer.dropEffect, return false if the data is not droppable
+        this.$el.addClass("draghover")
+        this._draghoverClassAdded = true
+    },
+
+    dragLeave: function (data, dataTransfer, e) { // optionally override me
+        if (this._draghoverClassAdded) this.$el.removeClass("draghover")
+    },
+
+    drop: function (data, dataTransfer, e) {
+
+        //TODO If this is a browser item
+        data.yPos = e.pageY;
+        data.startTime = PremixGlobals.pixelsToTime(e.pageX);
+        this.addTrack(data);
+
+    } // overide me!  if the draggable class returned some data on 'dragStart' it will be the first argument
 
 });
 
 module.exports = TimelineView;
-},{"../../common/config":26,"./timeline.hbs":43,"./view.track":46,"backbone":1,"dispatcher":28,"jquery":22}],46:[function(require,module,exports){
+},{"../../common/config":26,"./collection.timeline-track-list":41,"./model.timeline-track":43,"./timeline.hbs":45,"./view.track":48,"backbone":1,"dispatcher":28,"jquery":22,"underscore":23}],48:[function(require,module,exports){
 // Library dependencies
 var Backbone = require('backbone'),
     $ = require('jquery'),
     dispatcher = require('dispatcher');
+
+// Application dependencies
+var PremixGlobals = require('../../common/config');
 
 // Inner dependencies
 var scheduler = require('./scheduler'),
@@ -15380,13 +15514,11 @@ var TrackView = Backbone.View.extend({
     events: {
         'mousedown .track': 'onMouseDown'
     },
+    model: null,
     $track: null,
-    trackId: null,
-    url: null,
     dragging: false,
     initialize: function (options) {
-        this.trackId = options.id;
-        this.url = options.url;
+        this.model = options.model;
         this.listenTo(dispatcher, 'resizer:mouseup', this.onResizerMouseUp);
         this.listenTo(dispatcher, 'resizer:mousemove', this.onResizerMouseMove);
 
@@ -15394,17 +15526,20 @@ var TrackView = Backbone.View.extend({
     render: function() {
 
         var rawHTML = _trackTemplate({
-            id: this.trackId
+            model: this.model
         });
 
         this.$el.append(rawHTML);
 
-        this.$track = this.$el.find("#" + this.trackId);
+        this.$track = this.$el.find("#" + this.model.attributes.trackId);
+
+        this.$track.css("left", PremixGlobals.timeToPixels(this.model.attributes.startTime));
+        this.$track.css("top", this.model.attributes.yPos);
 
         var trackData = {
-            trackId: this.trackId,
-            url: this.url,
-            xPos: this.$track.css("left").replace("px", "")
+            trackId: this.model.attributes.trackId,
+            url: this.model.attributes.url,
+            trackStartTime: this.model.attributes.startTime
         };
 
         dispatcher.trigger('timeline:trackadded', trackData);
@@ -15412,7 +15547,7 @@ var TrackView = Backbone.View.extend({
         return this;
     },
     onMouseDown: function (e) {
-        if(e.currentTarget.id == this.trackId) {
+        if(e.currentTarget.id == this.model.attributes.trackId) {
             this.dragging = true;
         }
     },
@@ -15420,8 +15555,11 @@ var TrackView = Backbone.View.extend({
 
         if (this.dragging) {
 
-            var dragX = e.pageX - (this.$track.width()/2);
-            var dragY = e.pageY - (this.$track.height());
+            var timelineXPos = (e.pageX - $('#timeline-tracks').offset().left);
+            var timelineYPos = (e.pageY - $('#timeline-tracks').offset().top);
+
+            var dragX = timelineXPos - 20;
+            var dragY = timelineYPos - 20;
 
             this.$track.css("left", dragX);
             this.$track.css("top", dragY);
@@ -15447,7 +15585,7 @@ var TrackView = Backbone.View.extend({
             this.dragging = false;
             
             var trackData = {
-                trackId: this.trackId,
+                trackId: this.model.attributes.trackId,
                 xPos: this.$track.css("left").replace("px", "")
             };
             dispatcher.trigger('timeline:trackmoved', trackData);
@@ -15457,6 +15595,6 @@ var TrackView = Backbone.View.extend({
 });
 
 module.exports = TrackView;
-},{"./scheduler":42,"./track.hbs":44,"backbone":1,"dispatcher":28,"jquery":22}]},{},[29]);
+},{"../../common/config":26,"./scheduler":44,"./track.hbs":46,"backbone":1,"dispatcher":28,"jquery":22}]},{},[29]);
 
 //# sourceMappingURL=main.js.map

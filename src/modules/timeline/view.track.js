@@ -3,6 +3,9 @@ var Backbone = require('backbone'),
     $ = require('jquery'),
     dispatcher = require('dispatcher');
 
+// Application dependencies
+var PremixGlobals = require('../../common/config');
+
 // Inner dependencies
 var scheduler = require('./scheduler'),
     _trackTemplate = require('./track.hbs');
@@ -11,13 +14,11 @@ var TrackView = Backbone.View.extend({
     events: {
         'mousedown .track': 'onMouseDown'
     },
+    model: null,
     $track: null,
-    trackId: null,
-    url: null,
     dragging: false,
     initialize: function (options) {
-        this.trackId = options.id;
-        this.url = options.url;
+        this.model = options.model;
         this.listenTo(dispatcher, 'resizer:mouseup', this.onResizerMouseUp);
         this.listenTo(dispatcher, 'resizer:mousemove', this.onResizerMouseMove);
 
@@ -25,17 +26,20 @@ var TrackView = Backbone.View.extend({
     render: function() {
 
         var rawHTML = _trackTemplate({
-            id: this.trackId
+            model: this.model
         });
 
         this.$el.append(rawHTML);
 
-        this.$track = this.$el.find("#" + this.trackId);
+        this.$track = this.$el.find("#" + this.model.attributes.trackId);
+
+        this.$track.css("left", PremixGlobals.timeToPixels(this.model.attributes.startTime));
+        this.$track.css("top", this.model.attributes.yPos);
 
         var trackData = {
-            trackId: this.trackId,
-            url: this.url,
-            xPos: this.$track.css("left").replace("px", "")
+            trackId: this.model.attributes.trackId,
+            url: this.model.attributes.url,
+            trackStartTime: this.model.attributes.startTime
         };
 
         dispatcher.trigger('timeline:trackadded', trackData);
@@ -43,7 +47,7 @@ var TrackView = Backbone.View.extend({
         return this;
     },
     onMouseDown: function (e) {
-        if(e.currentTarget.id == this.trackId) {
+        if(e.currentTarget.id == this.model.attributes.trackId) {
             this.dragging = true;
         }
     },
@@ -51,8 +55,11 @@ var TrackView = Backbone.View.extend({
 
         if (this.dragging) {
 
-            var dragX = e.pageX - (this.$track.width()/2);
-            var dragY = e.pageY - (this.$track.height());
+            var timelineXPos = (e.pageX - $('#timeline-tracks').offset().left);
+            var timelineYPos = (e.pageY - $('#timeline-tracks').offset().top);
+
+            var dragX = timelineXPos - 20;
+            var dragY = timelineYPos - 20;
 
             this.$track.css("left", dragX);
             this.$track.css("top", dragY);
@@ -78,7 +85,7 @@ var TrackView = Backbone.View.extend({
             this.dragging = false;
             
             var trackData = {
-                trackId: this.trackId,
+                trackId: this.model.attributes.trackId,
                 xPos: this.$track.css("left").replace("px", "")
             };
             dispatcher.trigger('timeline:trackmoved', trackData);

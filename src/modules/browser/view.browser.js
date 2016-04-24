@@ -44,14 +44,14 @@ var BrowserView = Backbone.View.extend({
         this.collection = new BrowserItemCollection([browserItem1, browserItem2, browserItem3, browserItem4, browserItem5]);
         
         this.collection.on('change', this.render, this);
+
+        // Fetch will go here
     },
     render: function () {
         var rawHTML = _template({
         });
 
         this.$el.html(rawHTML);
-
-        // Fetch will go here
 
         var $iel = this.$el.find('#browser-items');
 
@@ -66,8 +66,6 @@ var BrowserView = Backbone.View.extend({
             browserItemView.render();
 
         });
-
-        // Fetch will end here
 
         return this;
     },

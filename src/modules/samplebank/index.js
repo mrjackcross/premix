@@ -51,7 +51,7 @@ function loadSample(trackData) {
     wavesurfer.load(trackData.url);
 
     wavesurfer.on('ready', function () {
-        dispatcher.trigger('samplebank:trackloaded', trackData.id);
+        dispatcher.trigger('samplebank:trackloaded', trackData.trackId);
     });
 
 }
@@ -67,8 +67,14 @@ function loadSample(trackData) {
  **/
 function playSample(trackHitData) {
 
+    // Stop the buffer if it's already playing
+    // if(bufferSources[trackHitData.trackId]) {
+    //     bufferSources[trackHitData.trackId].stop();
+    // }
+
     bufferSources[trackHitData.trackId] = AUDIO.createBufferSource();
     bufferSources[trackHitData.trackId].buffer = wavesurfers[trackHitData.trackId].backend.buffer;
+
 
     if (fxNode) {
         bufferSources[trackHitData.trackId].connect(fxNode);
