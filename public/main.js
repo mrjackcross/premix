@@ -513,7 +513,7 @@
 	
 	
 	// module
-	exports.push([module.id, "/** Global **/\n* {\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  cursor: default;\n}\nhtml {\n  height: 100%;\n  overflow: hidden;\n}\nbody {\n  background: -webkit-linear-gradient(#272927, #CC0052);\n  background: linear-gradient(#272927, #CC0052);\n  color: #666;\n  font-family: monospace;\n}\n/** Header **/\n#header {\n  height: 70px;\n}\n#header #logo {\n  height: 70px;\n  width: 234px;\n  background: url(" + __webpack_require__(14) + ") no-repeat center center;\n  background-size: contain;\n}\n/** Main Content **/\n#main-content {\n  position: absolute;\n  top: 70px;\n  bottom: 285px;\n  /* this should always be 50px more than #contextual-content.height */\n  left: 0px;\n  right: 0px;\n  overflow: scroll;\n  overflow-y: hidden;\n  /** Timeline **/\n  /** Tracks **/\n}\n#main-content #timeline {\n  min-height: 100%;\n  position: relative;\n  background: url(" + __webpack_require__(15) + ") repeat scroll;\n}\n#main-content .timeline-markers {\n  height: 15px;\n  position: absolute;\n  top: 0;\n  right: 0px;\n  left: 0px;\n  background-color: #000;\n  z-index: 100;\n}\n#main-content .timeline-markers .timeline-marker {\n  margin: 0;\n  padding: 1px;\n  width: 10%;\n  height: 15px;\n  float: left;\n  font-size: 10px;\n  text-align: left;\n  color: #cccccc;\n  background: -webkit-linear-gradient(#333, #222);\n  background: linear-gradient(#333, #222);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n#main-content #timeline-tracks {\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 0px;\n  right: 0px;\n  overflow-y: scroll;\n  z-index: 90;\n}\n#main-content #playhead {\n  width: 2px;\n  background-color: #CC0052;\n  position: absolute;\n  top: 15px;\n  bottom: 0px;\n  z-index: 100;\n}\n#main-content .track {\n  position: absolute;\n  background: -webkit-linear-gradient(#0086b3, #2255ff);\n  background: linear-gradient(#0086b3, #2255ff);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n#main-content .track.dragging {\n  opacity: 0.99;\n}\n#main-content .track.selected {\n  border: 1px solid #985f0d;\n}\n/** Contextual Content **/\n#contextual-content {\n  position: absolute;\n  bottom: 50px;\n  left: 0px;\n  right: 0px;\n  height: 235px;\n  overflow: hidden;\n  background-color: #000;\n}\n#contextual-content #contextual-content-handle {\n  width: 100%;\n  height: 15px;\n  background: url(" + __webpack_require__(16) + ") no-repeat center center;\n  cursor: row-resize;\n  position: relative;\n  z-index: 100;\n}\n#contextual-content #contextual-content-main {\n  overflow: auto;\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 0px;\n  right: 0px;\n  padding-top: 15px;\n  z-index: 90;\n  /** Browser **/\n}\n#contextual-content #contextual-content-main .browser-item {\n  height: 74px;\n  width: auto !important;\n  padding: 5px 10px;\n  margin: 0 10px 10px 0;\n  float: left;\n}\n/** Footer **/\nfooter {\n  position: fixed;\n  left: 0px;\n  right: 0px;\n  bottom: 0px;\n  height: 50px;\n  background-color: #fff;\n}\nfooter p {\n  line-height: 50px;\n}\n", ""]);
+	exports.push([module.id, "/** Global **/\n* {\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  cursor: default;\n}\nhtml {\n  height: 100%;\n  overflow: hidden;\n}\nbody {\n  background: -webkit-linear-gradient(#272927, #CC0052);\n  background: linear-gradient(#272927, #CC0052);\n  color: #666;\n  font-family: monospace;\n}\n/** Header **/\n#header {\n  height: 70px;\n}\n#header #logo {\n  height: 70px;\n  width: 234px;\n  background: url(" + __webpack_require__(14) + ") no-repeat center center;\n  background-size: contain;\n}\n/** Main Content **/\n#main-content {\n  position: absolute;\n  top: 70px;\n  bottom: 285px;\n  /* this should always be 50px more than #contextual-content.height */\n  left: 0px;\n  right: 0px;\n  overflow: scroll;\n  overflow-y: hidden;\n  /** Timeline **/\n  /** Tracks **/\n}\n#main-content #timeline {\n  min-height: 100%;\n  position: relative;\n  background: url(" + __webpack_require__(15) + ") repeat scroll;\n}\n#main-content .timeline-markers {\n  height: 15px;\n  position: absolute;\n  top: 0;\n  right: 0px;\n  left: 0px;\n  background-color: #000;\n  z-index: 100;\n}\n#main-content .timeline-markers .timeline-marker {\n  margin: 0;\n  padding: 1px;\n  width: 10%;\n  height: 15px;\n  float: left;\n  font-size: 10px;\n  text-align: left;\n  color: #cccccc;\n  background: -webkit-linear-gradient(#333, #222);\n  background: linear-gradient(#333, #222);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n#main-content #timeline-tracks {\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 0px;\n  right: 0px;\n  overflow-y: scroll;\n  z-index: 90;\n}\n#main-content #playhead {\n  width: 2px;\n  background-color: #CC0052;\n  position: absolute;\n  top: 15px;\n  bottom: 0px;\n  z-index: 100;\n}\n#main-content .track {\n  position: absolute;\n  background: linear-gradient(#00abb3, #2255ff);\n}\n#main-content .track.dragging {\n  opacity: 0.99;\n}\n#main-content .track.selected {\n  background: linear-gradient(#b39f00, #ff0100);\n}\n/** Contextual Content **/\n#contextual-content {\n  position: absolute;\n  bottom: 50px;\n  left: 0px;\n  right: 0px;\n  height: 235px;\n  overflow: hidden;\n  background-color: #000;\n}\n#contextual-content #contextual-content-handle {\n  width: 100%;\n  height: 15px;\n  background: url(" + __webpack_require__(16) + ") no-repeat center center;\n  cursor: row-resize;\n  position: relative;\n  z-index: 100;\n}\n#contextual-content #contextual-content-main {\n  overflow: auto;\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 0px;\n  right: 0px;\n  padding-top: 15px;\n  z-index: 90;\n  /** Browser **/\n}\n#contextual-content #contextual-content-main .browser-item {\n  height: 74px;\n  width: auto !important;\n  padding: 5px 10px;\n  margin: 0 10px 10px 0;\n  float: left;\n}\n/** Footer **/\nfooter {\n  position: fixed;\n  left: 0px;\n  right: 0px;\n  bottom: 0px;\n  height: 50px;\n  background-color: #fff;\n}\nfooter p {\n  line-height: 50px;\n}\n", ""]);
 	
 	// exports
 
@@ -14581,10 +14581,16 @@
 	    },
 	
 	    dragStart: function (dataTransfer, e) {
-	            return {
-	                type: 'browserItem',
-	                model: this.model.attributes
-	            }
+	
+	        var yOffset = e.clientY - this.$browserItem.offset().top;
+	        var xOffset = e.clientX - this.$browserItem.offset().left;
+	
+	        return {
+	            type: 'browserItem',
+	            model: this.model.attributes,
+	            yOffset: yOffset,
+	            xOffset: xOffset
+	        }
 	    } // override me, return data to be bound to drag
 	
 	});
@@ -16318,8 +16324,8 @@
 	
 	        switch(data.type) {
 	            case 'browserItem':
-	                data.model.yPos = e.clientY - this.$el.offset().top;
-	                data.model.startTime = PremixGlobals.pixelsToTime(e.clientX + this.$el.scrollLeft());
+	                data.model.yPos = (e.clientY - this.$el.offset().top) - data.yOffset;
+	                data.model.startTime = PremixGlobals.pixelsToTime(((e.clientX + this.$el.scrollLeft()) - this.$el.offset().left) - data.xOffset);
 	                this.addTrack(data.model);
 	                break;
 	            case 'timelineTrack':

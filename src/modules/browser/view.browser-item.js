@@ -45,10 +45,16 @@ var BrowserItemView = Backbone.View.extend({
     },
 
     dragStart: function (dataTransfer, e) {
-            return {
-                type: 'browserItem',
-                model: this.model.attributes
-            }
+
+        var yOffset = e.clientY - this.$browserItem.offset().top;
+        var xOffset = e.clientX - this.$browserItem.offset().left;
+
+        return {
+            type: 'browserItem',
+            model: this.model.attributes,
+            yOffset: yOffset,
+            xOffset: xOffset
+        }
     } // override me, return data to be bound to drag
 
 });

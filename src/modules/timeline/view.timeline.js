@@ -163,8 +163,8 @@ var TimelineView = Backbone.View.extend({
 
         switch(data.type) {
             case 'browserItem':
-                data.model.yPos = e.clientY - this.$el.offset().top;
-                data.model.startTime = PremixGlobals.pixelsToTime(e.clientX + this.$el.scrollLeft());
+                data.model.yPos = (e.clientY - this.$el.offset().top) - data.yOffset;
+                data.model.startTime = PremixGlobals.pixelsToTime(((e.clientX + this.$el.scrollLeft()) - this.$el.offset().left) - data.xOffset);
                 this.addTrack(data.model);
                 break;
             case 'timelineTrack':
