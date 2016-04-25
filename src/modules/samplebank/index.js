@@ -50,7 +50,7 @@ function loadSample(trackData) {
     wavesurfer.load(trackData.url);
 
     wavesurfer.on('ready', function () {
-        dispatcher.trigger('samplebank:trackloaded', trackData.trackId);
+        dispatcher.trigger('samplebank:sampleloaded', trackData.trackId);
     });
 
 }
@@ -67,7 +67,11 @@ function loadSample(trackData) {
  **/
 function playSample(trackHitData) {
 
-    wavesurfers[trackHitData.trackId].play(trackHitData.playTime || 0);
+    var trackId = trackHitData.trackId;
+    var playTime = trackHitData.playTime
+    var offset = trackHitData.offset;
+
+    wavesurfers[trackId].play(playTime, offset);
 
     //_playSampleDelayed(trackHitData);
 }
@@ -127,7 +131,7 @@ function init() {
     dispatcher.on('samplebank:stopsamples', stopSamples);
     dispatcher.on('samplebank:playpausesamples', playPauseSamples);
     dispatcher.on('samplebank:setfxnode', setFxNode);
-    dispatcher.on('timeline:trackadded', loadSample);
+    dispatcher.on('samplebank:loadsample', loadSample);
     dispatcher.trigger('samplebank:ready');
 }
 

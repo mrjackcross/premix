@@ -7,9 +7,10 @@
 
 
 var PremixGlobals = {
-    totalTime: 10.0,
-    pixelsPerSecond: 200,
+    totalTime: 600.0,
+    pixelsPerSecond: 100,
     lookahead: 0.100,
+    nudgeAmount: 0.010,
     getTotalTime: function () {
         return this.totalTime;
     },
@@ -18,6 +19,9 @@ var PremixGlobals = {
     },
     getLookahead: function () {
       return this.lookahead;
+    },
+    getNudgeAmount: function() {
+      return this.nudgeAmount;
     },
     getTimelineWidth: function() {
         return this.getTotalTime() * this.getPixelsPerSecond();

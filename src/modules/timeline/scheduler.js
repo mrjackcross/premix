@@ -17,11 +17,22 @@ var startTime,
     pauseDuration = 0.0;
 
 function trackAdded(trackInfo) {
+
     tracks[trackInfo.trackId] = {
         trackStartTime: trackInfo.trackStartTime,
+        trackLength: trackInfo.trackLength,
+        $el: trackInfo.$el,
+        isPlaying: false,
         played: false
     }
 }
+
+// function trackLoaded(trackId) {
+//
+//     var trackLength = PremixGlobals.pixelsToTime(tracks[trackId].$el.find('wave').width());
+//
+//     tracks[trackId].trackLength = trackLength;
+// }
 
 /**
  * Gets triggered when a track moves on the timeline
@@ -33,11 +44,17 @@ function trackAdded(trackInfo) {
 function trackMoved(trackInfo) {
     var newTrackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
 
-      tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
+    tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
 
     if(newTrackStartTime > currentTime) {
         tracks[trackInfo.trackId].played = false;
     }
+
+    if(isPlaying) {
+        stop();
+        play();
+    }
+
 }
 
 /**
@@ -46,17 +63,16 @@ function trackMoved(trackInfo) {
  *
  * @param pt: calculated time offset to delay the audio by
  **/
-function playAudioAtTime(trackId, pt) {
-    if(!tracks[trackId].played) {
+function playAudioAtTime(trackId, pt, offset) {
 
-        var trackHitData = {
-            trackId: trackId,
-            playTime: pt
-        }
-        dispatcher.trigger('timeline:audiohit', trackHitData);
 
-        tracks[trackId].played = true;
+    var trackHitData = {
+        trackId: trackId,
+        playTime: pt,
+        offset: offset
     }
+    dispatcher.trigger('timeline:audiohit', trackHitData);
+
 }
 
 /**
@@ -82,6 +98,12 @@ function play() {
 function stop() {
     isPlaying = false;
     pauseStart = AUDIO.currentTime;
+
+    for (var key in tracks) {
+        if (!tracks.hasOwnProperty(key)) continue;
+        tracks[key].isPlaying = false;
+    }
+
     dispatcher.trigger('timeline:paused');
 
 }
@@ -120,18 +142,27 @@ function togglePlay() {
  **/
 function scheduleAudio() {
     if (!isPlaying) return false;
-    currentTime = AUDIO.currentTime;
-    currentTime -= startTime;
-    currentTime -= pauseDuration;
+    currentTime = AUDIO.currentTime - startTime - pauseDuration;
 
     for (var key in tracks) {
         if (!tracks.hasOwnProperty(key)) continue;
         var track = tracks[key];
 
         if (track.trackStartTime < currentTime + PremixGlobals.getLookahead()) {
-            var pt = track.trackStartTime + startTime;
-            playAudioAtTime(key, pt);
+            if(!track.played) {
+                var pt = track.trackStartTime + startTime;
+                playAudioAtTime(key, pt, 0);
+                track.played = true;
+            }
         }
+        if(currentTime > track.trackStartTime && currentTime < (track.trackStartTime + track.trackLength)){
+            if(!track.isPlaying) {
+                var offset = currentTime - track.trackStartTime;
+                playAudioAtTime(key, currentTime, offset);
+                track.isPlaying = true;
+            }
+        }
+
     }
     advanceStep(currentTime);
     requestAnimationFrame(scheduleAudio);
@@ -145,7 +176,6 @@ function advanceStep(currentTime) {
     if (currentTime >= PremixGlobals.getTotalTime()) {
         reset();
         play();
-        dispatcher.trigger('timeline:looped');
     }
     dispatcher.trigger('timeline:stepchanged', currentTime);
 }
@@ -158,6 +188,7 @@ function advanceStep(currentTime) {
  **/
 var api = {
     trackAdded: trackAdded,
+    // trackLoaded: trackLoaded,
     trackMoved: trackMoved,
     play: play,
     togglePlay: togglePlay,

@@ -22,7 +22,8 @@ var dispatcher = require('dispatcher');
 var KEYS = {
     'PAUSE_RESUME': 32, // Space
     'RESET': 13, // Enter
-    'TOGGLE_FILTER': 70 // f
+    'NUDGE_LEFT': 37, // Left Arrow,
+    'NUDGE_RIGHT': 39// Right Arrow
 };
 
 
@@ -35,7 +36,16 @@ var KEYS = {
 function testKeyEvent(e) {
     var key = _.invert(KEYS)[e.which];
     if (key) {
+
+        e.preventDefault();
         dispatcher.trigger('keycontrols:keypressed', key);
+    }
+}
+
+function preventDefaults(e) {
+    var key = _.invert(KEYS)[e.which];
+    if (key) {
+        e.preventDefault();
     }
 }
 
@@ -47,6 +57,8 @@ function testKeyEvent(e) {
 function init() {
     console.log('KeyControls init');
     $(window).on('keyup', testKeyEvent);
+    $(window).on('keydown', preventDefaults);
+
 }
 
 

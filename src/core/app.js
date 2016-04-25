@@ -52,9 +52,10 @@ function launchApp() {
     // Bind some connecting events to 'wire up' our modules
     proxyEvents({
         'timeline:audiohit': 'samplebank:playsample',
-        'timeline:paused': 'samplebank:pausesamples',
-        'timeline:stopped': 'samplebank:stopsamples',
-        'timeline:looped': 'samplebank:stopsamples'
+        'timeline:paused': 'samplebank:stopsamples',
+        'timeline:reset': 'samplebank:stopsamples',
+        'timeline:trackadded': 'samplebank:loadsample',
+        'samplebank:sampleloaded:': 'timeline:sampleloaded'
     });
 
     // Handle keypress events from KeyControls and trigger
@@ -66,6 +67,12 @@ function launchApp() {
                 break;
             case 'RESET':
                 dispatcher.trigger('timeline:reset')
+                break;
+            case 'NUDGE_LEFT':
+                dispatcher.trigger('timeline:nudgeleft')
+                break;
+            case 'NUDGE_RIGHT':
+                dispatcher.trigger('timeline:nudgeright')
                 break;
             default:
                 break;

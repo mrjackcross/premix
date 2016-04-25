@@ -22,6 +22,8 @@ var TimelineView = Backbone.View.extend({
         this.listenTo( this.collection, 'add', this.render );
 
         this.listenTo(dispatcher, 'timeline:stepchanged', this.stepChanged);
+        this.listenTo(dispatcher, 'timeline:tracknudged', this.trackMoved);
+
 
         this.$el.bind("dragover", _.bind(this._dragOverEvent, this));
         this.$el.bind("dragenter", _.bind(this._dragEnterEvent, this));
@@ -39,7 +41,6 @@ var TimelineView = Backbone.View.extend({
         this.$el.find('#timeline').css("width", PremixGlobals.getTimelineWidth());
 
         var $tel = this.$el.find('#timeline-tracks');
-
 
         this.trackViews = this.collection.map(function(model) {
             var trackView = new TrackView({
@@ -62,15 +63,26 @@ var TimelineView = Backbone.View.extend({
     },
     addTrack: function(trackData){
 
+        var $tel = this.$el.find('#timeline-tracks');
+
         var track = new TimelineTrackModel({
             name: trackData.name,
             trackId: trackData.trackId + '-' + this.uniqueId++,
             url: trackData.url,
             yPos: trackData.yPos,
-            trackStartTime: trackData.startTime
+            trackStartTime: trackData.startTime,
+            trackLength: trackData.trackLength
         });
 
         this.collection.add(track);
+
+        // var trackView = new TrackView({
+        //     model: track,
+        //     el: $tel
+        // });
+        //
+        // this.$el.append(trackView.render().el);
+
     },
     trackMoved: function(trackMoveData) {
 

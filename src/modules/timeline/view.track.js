@@ -10,13 +10,18 @@ var scheduler = require('./scheduler'),
 
 var TrackView = Backbone.View.extend({
     events: {
-        // 'mousedown .track': 'onMouseDown'
     },
     model: null,
     $track: null,
     trackAdded: false,
+    isSelected: false,
     initialize: function (options) {
         this.model = options.model;
+
+        this.listenTo(dispatcher, 'timeline:nudgeleft', this.nudgeLeft);
+        this.listenTo(dispatcher, 'timeline:nudgeright', this.nudgeRight);
+
+
     },
     render: function() {
 
@@ -30,6 +35,8 @@ var TrackView = Backbone.View.extend({
 
         this.$track.attr("draggable", "true");
         this.$track.bind("dragstart", _.bind(this._dragStartEvent, this));
+        this.$track.bind("click", _.bind(this.onClick, this));
+
 
         this.$track.css("left", PremixGlobals.timeToPixels(this.model.attributes.trackStartTime));
         this.$track.css("top", this.model.attributes.yPos);
@@ -38,7 +45,9 @@ var TrackView = Backbone.View.extend({
             var trackData = {
                 trackId: this.model.attributes.trackId,
                 url: this.model.attributes.url,
-                trackStartTime: this.model.attributes.trackStartTime
+                trackStartTime: this.model.attributes.trackStartTime,
+                $el: this.$el,
+                trackLength: this.model.attributes.trackLength
             };
 
             dispatcher.trigger('timeline:trackadded', trackData);
@@ -47,6 +56,42 @@ var TrackView = Backbone.View.extend({
         }
 
         return this;
+    },
+    onClick: function(e) {
+        this.$track.toggleClass('selected');
+        (this.isSelected) ? this.isSelected = false : this.isSelected = true;
+    },
+    nudgeLeft: function() {
+
+        if(this.isSelected) {
+
+            var newStartTime = this.model.attributes.trackStartTime - PremixGlobals.getNudgeAmount();
+
+            var trackMoveData = {
+                trackId: this.model.attributes.trackId,
+                startTime: newStartTime,
+                yPos: this.model.attributes.yPos
+            }
+
+            dispatcher.trigger('timeline:tracknudged', trackMoveData);
+
+        }
+    },
+    nudgeRight: function() {
+
+        if(this.isSelected) {
+
+            var newStartTime = this.model.attributes.trackStartTime + PremixGlobals.getNudgeAmount();
+
+            var trackMoveData = {
+                trackId: this.model.attributes.trackId,
+                startTime: newStartTime,
+                yPos: this.model.attributes.yPos
+            }
+
+            dispatcher.trigger('timeline:tracknudged', trackMoveData);
+
+        }
     },
     _dragStartEvent: function (e) {
         var data

@@ -14,52 +14,62 @@ var BrowserView = Backbone.View.extend({
         var browserItem2 = new BrowserItemModel({
             name: 'Kick',
             trackId: 'kick',
-            url: 'assets/samples/kick.wav'
+            url: 'assets/samples/kick.wav',
+            trackLength: 1
         });
         var browserItem1 = new BrowserItemModel({
             name: 'Snare',
             trackId: 'snare',
-            url: 'assets/samples/snare.wav'
+            url: 'assets/samples/snare.wav',
+            trackLength: 1
         });
         var browserItem4 = new BrowserItemModel({
             name: 'Closed HiHat',
             trackId: 'closedhihat',
-            url: 'assets/samples/closedHat.wav'
+            url: 'assets/samples/closedHat.wav',
+            trackLength: 1
         });
         var browserItem3 = new BrowserItemModel({
             name: 'Open HiHat',
             trackId: 'openhihat',
-            url: 'assets/samples/openHat.wav'
+            url: 'assets/samples/openHat.wav',
+            trackLength: 1
         });
         var browserItem5 = new BrowserItemModel({
             name: 'Trolley Snatcha - The Future',
             trackId: 'trolley-snatcher',
-            url: 'assets/samples/trolley-snatcher.mp3'
+            url: 'assets/samples/trolley-snatcher.mp3',
+            trackLength: 360
         });
         var browserItem6 = new BrowserItemModel({
             name: 'RedEye',
             trackId: 'red-eye',
-            url: 'assets/samples/redeye.mp3'
+            url: 'assets/samples/redeye.mp3',
+            trackLength: 360
         });
         var browserItem7 = new BrowserItemModel({
             name: 'Trust Nobody',
             trackId: 'trust-nobody',
-            url: 'assets/samples/trustnobody.mp3'
+            url: 'assets/samples/trustnobody.mp3',
+            trackLength: 360
         });
         var browserItem8 = new BrowserItemModel({
             name: 'Downlink - Gamma Ray',
             trackId: 'downlink',
-            url: 'assets/samples/downlink.mp3'
+            url: 'assets/samples/downlink.mp3',
+            trackLength: 360
         });
         var browserItem9 = new BrowserItemModel({
             name: 'Open HiHat',
             trackId: 'openhihat',
-            url: 'assets/samples/openHat.wav'
+            url: 'assets/samples/openHat.wav',
+            trackLength: 360
         });
         var browserItem10 = new BrowserItemModel({
             name: 'Calibre - Gone Away',
             trackId: 'dnb',
-            url: 'assets/samples/06-calibre-gone_away.mp3'
+            url: 'assets/samples/06-calibre-gone_away.mp3',
+            trackLength: 360
         });
 
 

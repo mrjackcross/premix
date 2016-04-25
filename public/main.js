@@ -513,7 +513,7 @@
 	
 	
 	// module
-	exports.push([module.id, "* {\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  cursor: default;\n}\nhtml {\n  height: 100%;\n  overflow: hidden;\n}\nbody {\n  background: -webkit-linear-gradient(#272927, #CC0052);\n  background: linear-gradient(#272927, #CC0052);\n  color: #666;\n  font-family: monospace;\n}\n#main-content {\n  position: absolute;\n  top: 70px;\n  bottom: 285px;\n  /* this should always be 50px more than #contextual-content.height */\n  left: 0px;\n  right: 0px;\n  overflow: scroll;\n}\n#contextual-content {\n  position: absolute;\n  bottom: 50px;\n  left: 0px;\n  right: 0px;\n  height: 235px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  background-color: #000;\n}\n#contextual-content-handle {\n  width: 100%;\n  height: 15px;\n  background: url(" + __webpack_require__(14) + ") no-repeat center center;\n  cursor: row-resize;\n}\nfooter {\n  position: fixed;\n  left: 0px;\n  right: 0px;\n  bottom: 0px;\n  height: 50px;\n  background-color: #fff;\n}\nfooter p {\n  line-height: 50px;\n}\n/** Timeline **/\n.timeline {\n  min-width: 100%;\n  min-height: 100%;\n  position: relative;\n  background-color: #222222;\n}\n.timeline-markers {\n  height: 15px;\n  position: absolute;\n  top: 0;\n  right: 0px;\n  left: 0px;\n}\n.timeline-marker {\n  margin: 0;\n  padding: 1px;\n  width: 10%;\n  height: 15px;\n  float: left;\n  font-size: 10px;\n  text-align: left;\n  color: #cccccc;\n  background: -webkit-linear-gradient(#333, #222);\n  background: linear-gradient(#333, #222);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n#timeline-tracks {\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 0px;\n  right: 0px;\n}\n#playhead {\n  width: 2px;\n  background-color: #CC0052;\n  position: absolute;\n  top: 15px;\n  bottom: 0px;\n  z-index: 100;\n}\n/** Tracks **/\n.track {\n  position: absolute;\n  background: -webkit-linear-gradient(#0086b3, #2255ff);\n  background: linear-gradient(#0086b3, #2255ff);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n.track.dragging {\n  opacity: 0.99;\n}\n#kick {\n  top: 200px;\n  left: 10%;\n}\n#snare {\n  top: 15px;\n  left: 20%;\n}\n/** Browser **/\n.browser-item {\n  width: auto !important;\n}\n.ghost {\n  opacity: 0.5;\n}\n", ""]);
+	exports.push([module.id, "* {\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  cursor: default;\n}\nhtml {\n  height: 100%;\n  overflow: hidden;\n}\nbody {\n  background: -webkit-linear-gradient(#272927, #CC0052);\n  background: linear-gradient(#272927, #CC0052);\n  color: #666;\n  font-family: monospace;\n}\n#main-content {\n  position: absolute;\n  top: 70px;\n  bottom: 285px;\n  /* this should always be 50px more than #contextual-content.height */\n  left: 0px;\n  right: 0px;\n  overflow: scroll;\n}\n#contextual-content {\n  position: absolute;\n  bottom: 50px;\n  left: 0px;\n  right: 0px;\n  height: 235px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  background-color: #000;\n}\n#contextual-content-handle {\n  width: 100%;\n  height: 15px;\n  background: url(" + __webpack_require__(14) + ") no-repeat center center;\n  cursor: row-resize;\n}\nfooter {\n  position: fixed;\n  left: 0px;\n  right: 0px;\n  bottom: 0px;\n  height: 50px;\n  background-color: #fff;\n}\nfooter p {\n  line-height: 50px;\n}\n/** Timeline **/\n.timeline {\n  min-width: 100%;\n  min-height: 100%;\n  position: relative;\n  background-color: #222222;\n}\n.timeline-markers {\n  height: 15px;\n  position: absolute;\n  top: 0;\n  right: 0px;\n  left: 0px;\n}\n.timeline-marker {\n  margin: 0;\n  padding: 1px;\n  width: 10%;\n  height: 15px;\n  float: left;\n  font-size: 10px;\n  text-align: left;\n  color: #cccccc;\n  background: -webkit-linear-gradient(#333, #222);\n  background: linear-gradient(#333, #222);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n#timeline-tracks {\n  position: absolute;\n  top: 0px;\n  bottom: 0px;\n  left: 0px;\n  right: 0px;\n}\n#playhead {\n  width: 2px;\n  background-color: #CC0052;\n  position: absolute;\n  top: 15px;\n  bottom: 0px;\n  z-index: 100;\n}\n/** Tracks **/\n.track {\n  position: absolute;\n  background: -webkit-linear-gradient(#0086b3, #2255ff);\n  background: linear-gradient(#0086b3, #2255ff);\n  border: 1px solid #555;\n  box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  -webkit-box-sizing: border-box;\n}\n.track.dragging {\n  opacity: 0.99;\n}\n.track.selected {\n  border: 1px solid #985f0d;\n}\n/** Browser **/\n.browser-item {\n  width: auto !important;\n  padding: 5px 10px;\n  margin-right: 10px;\n  float: left;\n}\n", ""]);
 	
 	// exports
 
@@ -582,9 +582,10 @@
 	    // Bind some connecting events to 'wire up' our modules
 	    proxyEvents({
 	        'timeline:audiohit': 'samplebank:playsample',
-	        'timeline:paused': 'samplebank:pausesamples',
-	        'timeline:stopped': 'samplebank:stopsamples',
-	        'timeline:looped': 'samplebank:stopsamples'
+	        'timeline:paused': 'samplebank:stopsamples',
+	        'timeline:reset': 'samplebank:stopsamples',
+	        'timeline:trackadded': 'samplebank:loadsample',
+	        'samplebank:sampleloaded:': 'timeline:sampleloaded'
 	    });
 	
 	    // Handle keypress events from KeyControls and trigger
@@ -596,6 +597,12 @@
 	                break;
 	            case 'RESET':
 	                dispatcher.trigger('timeline:reset')
+	                break;
+	            case 'NUDGE_LEFT':
+	                dispatcher.trigger('timeline:nudgeleft')
+	                break;
+	            case 'NUDGE_RIGHT':
+	                dispatcher.trigger('timeline:nudgeright')
 	                break;
 	            default:
 	                break;
@@ -14052,7 +14059,7 @@
 	    wavesurfer.load(trackData.url);
 	
 	    wavesurfer.on('ready', function () {
-	        dispatcher.trigger('samplebank:trackloaded', trackData.trackId);
+	        dispatcher.trigger('samplebank:sampleloaded', trackData.trackId);
 	    });
 	
 	}
@@ -14069,7 +14076,11 @@
 	 **/
 	function playSample(trackHitData) {
 	
-	    wavesurfers[trackHitData.trackId].play(trackHitData.playTime || 0);
+	    var trackId = trackHitData.trackId;
+	    var playTime = trackHitData.playTime
+	    var offset = trackHitData.offset;
+	
+	    wavesurfers[trackId].play(playTime, offset);
 	
 	    //_playSampleDelayed(trackHitData);
 	}
@@ -14129,7 +14140,7 @@
 	    dispatcher.on('samplebank:stopsamples', stopSamples);
 	    dispatcher.on('samplebank:playpausesamples', playPauseSamples);
 	    dispatcher.on('samplebank:setfxnode', setFxNode);
-	    dispatcher.on('timeline:trackadded', loadSample);
+	    dispatcher.on('samplebank:loadsample', loadSample);
 	    dispatcher.trigger('samplebank:ready');
 	}
 	
@@ -14189,9 +14200,10 @@
 	
 	
 	var PremixGlobals = {
-	    totalTime: 10.0,
-	    pixelsPerSecond: 200,
+	    totalTime: 600.0,
+	    pixelsPerSecond: 100,
 	    lookahead: 0.100,
+	    nudgeAmount: 0.010,
 	    getTotalTime: function () {
 	        return this.totalTime;
 	    },
@@ -14200,6 +14212,9 @@
 	    },
 	    getLookahead: function () {
 	      return this.lookahead;
+	    },
+	    getNudgeAmount: function() {
+	      return this.nudgeAmount;
 	    },
 	    getTimelineWidth: function() {
 	        return this.getTotalTime() * this.getPixelsPerSecond();
@@ -14352,52 +14367,62 @@
 	        var browserItem2 = new BrowserItemModel({
 	            name: 'Kick',
 	            trackId: 'kick',
-	            url: 'assets/samples/kick.wav'
+	            url: 'assets/samples/kick.wav',
+	            trackLength: 1
 	        });
 	        var browserItem1 = new BrowserItemModel({
 	            name: 'Snare',
 	            trackId: 'snare',
-	            url: 'assets/samples/snare.wav'
+	            url: 'assets/samples/snare.wav',
+	            trackLength: 1
 	        });
 	        var browserItem4 = new BrowserItemModel({
 	            name: 'Closed HiHat',
 	            trackId: 'closedhihat',
-	            url: 'assets/samples/closedHat.wav'
+	            url: 'assets/samples/closedHat.wav',
+	            trackLength: 1
 	        });
 	        var browserItem3 = new BrowserItemModel({
 	            name: 'Open HiHat',
 	            trackId: 'openhihat',
-	            url: 'assets/samples/openHat.wav'
+	            url: 'assets/samples/openHat.wav',
+	            trackLength: 1
 	        });
 	        var browserItem5 = new BrowserItemModel({
 	            name: 'Trolley Snatcha - The Future',
 	            trackId: 'trolley-snatcher',
-	            url: 'assets/samples/trolley-snatcher.mp3'
+	            url: 'assets/samples/trolley-snatcher.mp3',
+	            trackLength: 360
 	        });
 	        var browserItem6 = new BrowserItemModel({
 	            name: 'RedEye',
 	            trackId: 'red-eye',
-	            url: 'assets/samples/redeye.mp3'
+	            url: 'assets/samples/redeye.mp3',
+	            trackLength: 360
 	        });
 	        var browserItem7 = new BrowserItemModel({
 	            name: 'Trust Nobody',
 	            trackId: 'trust-nobody',
-	            url: 'assets/samples/trustnobody.mp3'
+	            url: 'assets/samples/trustnobody.mp3',
+	            trackLength: 360
 	        });
 	        var browserItem8 = new BrowserItemModel({
 	            name: 'Downlink - Gamma Ray',
 	            trackId: 'downlink',
-	            url: 'assets/samples/downlink.mp3'
+	            url: 'assets/samples/downlink.mp3',
+	            trackLength: 360
 	        });
 	        var browserItem9 = new BrowserItemModel({
 	            name: 'Open HiHat',
 	            trackId: 'openhihat',
-	            url: 'assets/samples/openHat.wav'
+	            url: 'assets/samples/openHat.wav',
+	            trackLength: 360
 	        });
 	        var browserItem10 = new BrowserItemModel({
 	            name: 'Calibre - Gone Away',
 	            trackId: 'dnb',
-	            url: 'assets/samples/06-calibre-gone_away.mp3'
+	            url: 'assets/samples/06-calibre-gone_away.mp3',
+	            trackLength: 360
 	        });
 	
 	
@@ -15768,7 +15793,8 @@
 	var KEYS = {
 	    'PAUSE_RESUME': 32, // Space
 	    'RESET': 13, // Enter
-	    'TOGGLE_FILTER': 70 // f
+	    'NUDGE_LEFT': 37, // Left Arrow,
+	    'NUDGE_RIGHT': 39// Right Arrow
 	};
 	
 	
@@ -15781,7 +15807,16 @@
 	function testKeyEvent(e) {
 	    var key = _.invert(KEYS)[e.which];
 	    if (key) {
+	
+	        e.preventDefault();
 	        dispatcher.trigger('keycontrols:keypressed', key);
+	    }
+	}
+	
+	function preventDefaults(e) {
+	    var key = _.invert(KEYS)[e.which];
+	    if (key) {
+	        e.preventDefault();
 	    }
 	}
 	
@@ -15793,6 +15828,8 @@
 	function init() {
 	    console.log('KeyControls init');
 	    $(window).on('keyup', testKeyEvent);
+	    $(window).on('keydown', preventDefaults);
+	
 	}
 	
 	
@@ -15826,17 +15863,15 @@
 	 **/
 	function init(options) {
 	    console.log('Timeline init');
-	    
+	
+	    var timelineView = new TimelineView(options);
+	    timelineView.render();
+	
 	    dispatcher.on('timeline:toggleplay', scheduler.togglePlay);
 	    dispatcher.on('timeline:reset', scheduler.reset);
 	    dispatcher.on('timeline:trackmoved', scheduler.trackMoved);
 	    dispatcher.on('timeline:trackadded', scheduler.trackAdded);
-	    
-	    
-	    
-	    var timelineView = new TimelineView(options);
-	    timelineView.render();
-	    
+	
 	}
 	
 	/**
@@ -15859,20 +15894,34 @@
 	var AUDIO = __webpack_require__(21),
 	    PremixGlobals = __webpack_require__(23);
 	
-	var startTime = 0.0;
-	var isPlaying = false;
+	// Variables
 	var tracks = {};
-	var pauseStart = 0.0;
-	var pauseDuration = 0.0;
-	var _initialized = false;
 	
+	var isPlaying,
+	    _initialized = false;
+	
+	var startTime,
+	    currentTime,
+	    pauseStart,
+	    pauseDuration = 0.0;
 	
 	function trackAdded(trackInfo) {
+	
 	    tracks[trackInfo.trackId] = {
 	        trackStartTime: trackInfo.trackStartTime,
+	        trackLength: trackInfo.trackLength,
+	        $el: trackInfo.$el,
+	        isPlaying: false,
 	        played: false
 	    }
 	}
+	
+	// function trackLoaded(trackId) {
+	//
+	//     var trackLength = PremixGlobals.pixelsToTime(tracks[trackId].$el.find('wave').width());
+	//
+	//     tracks[trackId].trackLength = trackLength;
+	// }
 	
 	/**
 	 * Gets triggered when a track moves on the timeline
@@ -15884,11 +15933,17 @@
 	function trackMoved(trackInfo) {
 	    var newTrackStartTime = PremixGlobals.pixelsToTime(trackInfo.xPos);
 	
-	      tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
+	    tracks[trackInfo.trackId].trackStartTime = newTrackStartTime;
 	
 	    if(newTrackStartTime > currentTime) {
 	        tracks[trackInfo.trackId].played = false;
 	    }
+	
+	    if(isPlaying) {
+	        stop();
+	        play();
+	    }
+	
 	}
 	
 	/**
@@ -15897,17 +15952,16 @@
 	 *
 	 * @param pt: calculated time offset to delay the audio by
 	 **/
-	function playAudioAtTime(trackId, pt) {
-	    if(!tracks[trackId].played) {
+	function playAudioAtTime(trackId, pt, offset) {
 	
-	        var trackHitData = {
-	            trackId: trackId,
-	            playTime: pt
-	        }
-	        dispatcher.trigger('timeline:audiohit', trackHitData);
 	
-	        tracks[trackId].played = true;
+	    var trackHitData = {
+	        trackId: trackId,
+	        playTime: pt,
+	        offset: offset
 	    }
+	    dispatcher.trigger('timeline:audiohit', trackHitData);
+	
 	}
 	
 	/**
@@ -15933,6 +15987,12 @@
 	function stop() {
 	    isPlaying = false;
 	    pauseStart = AUDIO.currentTime;
+	
+	    for (var key in tracks) {
+	        if (!tracks.hasOwnProperty(key)) continue;
+	        tracks[key].isPlaying = false;
+	    }
+	
 	    dispatcher.trigger('timeline:paused');
 	
 	}
@@ -15971,18 +16031,27 @@
 	 **/
 	function scheduleAudio() {
 	    if (!isPlaying) return false;
-	    var currentTime = AUDIO.currentTime;
-	    currentTime -= startTime;
-	    currentTime -= pauseDuration;
+	    currentTime = AUDIO.currentTime - startTime - pauseDuration;
 	
 	    for (var key in tracks) {
 	        if (!tracks.hasOwnProperty(key)) continue;
 	        var track = tracks[key];
 	
 	        if (track.trackStartTime < currentTime + PremixGlobals.getLookahead()) {
-	            var pt = track.trackStartTime + startTime;
-	            playAudioAtTime(key, pt);
+	            if(!track.played) {
+	                var pt = track.trackStartTime + startTime;
+	                playAudioAtTime(key, pt, 0);
+	                track.played = true;
+	            }
 	        }
+	        if(currentTime > track.trackStartTime && currentTime < (track.trackStartTime + track.trackLength)){
+	            if(!track.isPlaying) {
+	                var offset = currentTime - track.trackStartTime;
+	                playAudioAtTime(key, currentTime, offset);
+	                track.isPlaying = true;
+	            }
+	        }
+	
 	    }
 	    advanceStep(currentTime);
 	    requestAnimationFrame(scheduleAudio);
@@ -15996,7 +16065,6 @@
 	    if (currentTime >= PremixGlobals.getTotalTime()) {
 	        reset();
 	        play();
-	        dispatcher.trigger('timeline:looped');
 	    }
 	    dispatcher.trigger('timeline:stepchanged', currentTime);
 	}
@@ -16009,6 +16077,7 @@
 	 **/
 	var api = {
 	    trackAdded: trackAdded,
+	    // trackLoaded: trackLoaded,
 	    trackMoved: trackMoved,
 	    play: play,
 	    togglePlay: togglePlay,
@@ -16047,6 +16116,8 @@
 	        this.listenTo( this.collection, 'add', this.render );
 	
 	        this.listenTo(dispatcher, 'timeline:stepchanged', this.stepChanged);
+	        this.listenTo(dispatcher, 'timeline:tracknudged', this.trackMoved);
+	
 	
 	        this.$el.bind("dragover", _.bind(this._dragOverEvent, this));
 	        this.$el.bind("dragenter", _.bind(this._dragEnterEvent, this));
@@ -16064,7 +16135,6 @@
 	        this.$el.find('#timeline').css("width", PremixGlobals.getTimelineWidth());
 	
 	        var $tel = this.$el.find('#timeline-tracks');
-	
 	
 	        this.trackViews = this.collection.map(function(model) {
 	            var trackView = new TrackView({
@@ -16087,15 +16157,26 @@
 	    },
 	    addTrack: function(trackData){
 	
+	        var $tel = this.$el.find('#timeline-tracks');
+	
 	        var track = new TimelineTrackModel({
 	            name: trackData.name,
 	            trackId: trackData.trackId + '-' + this.uniqueId++,
 	            url: trackData.url,
 	            yPos: trackData.yPos,
-	            trackStartTime: trackData.startTime
+	            trackStartTime: trackData.startTime,
+	            trackLength: trackData.trackLength
 	        });
 	
 	        this.collection.add(track);
+	
+	        // var trackView = new TrackView({
+	        //     model: track,
+	        //     el: $tel
+	        // });
+	        //
+	        // this.$el.append(trackView.render().el);
+	
 	    },
 	    trackMoved: function(trackMoveData) {
 	
@@ -16207,13 +16288,18 @@
 	
 	var TrackView = Backbone.View.extend({
 	    events: {
-	        // 'mousedown .track': 'onMouseDown'
 	    },
 	    model: null,
 	    $track: null,
 	    trackAdded: false,
+	    isSelected: false,
 	    initialize: function (options) {
 	        this.model = options.model;
+	
+	        this.listenTo(dispatcher, 'timeline:nudgeleft', this.nudgeLeft);
+	        this.listenTo(dispatcher, 'timeline:nudgeright', this.nudgeRight);
+	
+	
 	    },
 	    render: function() {
 	
@@ -16227,6 +16313,8 @@
 	
 	        this.$track.attr("draggable", "true");
 	        this.$track.bind("dragstart", _.bind(this._dragStartEvent, this));
+	        this.$track.bind("click", _.bind(this.onClick, this));
+	
 	
 	        this.$track.css("left", PremixGlobals.timeToPixels(this.model.attributes.trackStartTime));
 	        this.$track.css("top", this.model.attributes.yPos);
@@ -16235,7 +16323,9 @@
 	            var trackData = {
 	                trackId: this.model.attributes.trackId,
 	                url: this.model.attributes.url,
-	                trackStartTime: this.model.attributes.trackStartTime
+	                trackStartTime: this.model.attributes.trackStartTime,
+	                $el: this.$el,
+	                trackLength: this.model.attributes.trackLength
 	            };
 	
 	            dispatcher.trigger('timeline:trackadded', trackData);
@@ -16244,6 +16334,42 @@
 	        }
 	
 	        return this;
+	    },
+	    onClick: function(e) {
+	        this.$track.toggleClass('selected');
+	        (this.isSelected) ? this.isSelected = false : this.isSelected = true;
+	    },
+	    nudgeLeft: function() {
+	
+	        if(this.isSelected) {
+	
+	            var newStartTime = this.model.attributes.trackStartTime - PremixGlobals.getNudgeAmount();
+	
+	            var trackMoveData = {
+	                trackId: this.model.attributes.trackId,
+	                startTime: newStartTime,
+	                yPos: this.model.attributes.yPos
+	            }
+	
+	            dispatcher.trigger('timeline:tracknudged', trackMoveData);
+	
+	        }
+	    },
+	    nudgeRight: function() {
+	
+	        if(this.isSelected) {
+	
+	            var newStartTime = this.model.attributes.trackStartTime + PremixGlobals.getNudgeAmount();
+	
+	            var trackMoveData = {
+	                trackId: this.model.attributes.trackId,
+	                startTime: newStartTime,
+	                yPos: this.model.attributes.yPos
+	            }
+	
+	            dispatcher.trigger('timeline:tracknudged', trackMoveData);
+	
+	        }
 	    },
 	    _dragStartEvent: function (e) {
 	        var data
