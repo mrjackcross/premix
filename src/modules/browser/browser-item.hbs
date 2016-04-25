@@ -1,5 +1,3 @@
-<button type="button" class="list-group-item browser-item" id="browser-item-{{model.attributes.trackId}}"
-        data-track-id="{{model.attributes.trackId}}"
-        data-url="{{model.attributes.url}}">
-    {{model.attributes.name}}
+<button draggable="true" type="button" class="list-group-item browser-item" id="browser-item-{{model.attributes.id}}">
+    {{model.attributes.artists.0.name}} - {{model.attributes.name}}
 </button>

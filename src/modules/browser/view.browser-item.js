@@ -6,6 +6,7 @@ var _template = require('./browser-item.hbs');
 
 var BrowserItemView = Backbone.View.extend({
     events: {
+        //'dragstart': '_dragStartEvent'
     },
     model: null,
     $browserItem: null,
@@ -14,22 +15,25 @@ var BrowserItemView = Backbone.View.extend({
     },
     render: function () {
 
+        var imageUrl = this.model.attributes.album.images[2].url;
+        var img = '<img src="' + imageUrl + '" />';
+
         var rawHTML = _template({
             model: this.model
         });
 
         this.$el.append(rawHTML);
 
-        this.$browserItem = this.$el.find("#browser-item-" + this.model.attributes.trackId);
+        this.$browserItem = this.$el.find("#browser-item-" + this.model.attributes.id);
 
-        this.$browserItem.attr("draggable", "true");
+        this.$browserItem.prepend(img);
+
         this.$browserItem.bind("dragstart", _.bind(this._dragStartEvent, this));
 
-        // Fetch will go here
         return this;
     },
     _dragStartEvent: function (e) {
-        var data
+        var data;
         if (e.originalEvent) e = e.originalEvent;
         e.dataTransfer.effectAllowed = "copy"; // default to copy
         data = this.dragStart(e.dataTransfer, e);
@@ -41,10 +45,11 @@ var BrowserItemView = Backbone.View.extend({
     },
 
     dragStart: function (dataTransfer, e) {
-        return {
-            type: 'browserItem',
-            model: this.model.attributes,
-        }    } // override me, return data to be bound to drag
+            return {
+                type: 'browserItem',
+                model: this.model.attributes
+            }
+    } // override me, return data to be bound to drag
 
 });
 

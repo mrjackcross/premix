@@ -94,7 +94,11 @@ function playSample(trackHitData) {
 function stopSamples() {
     for (var i in wavesurfers) {
         if (wavesurfers.hasOwnProperty(i)) {
-            wavesurfers[i].stop();
+
+            if(wavesurfers[i].isPlaying()) {
+                wavesurfers[i].stop();
+            }
+
         }
     }
 }

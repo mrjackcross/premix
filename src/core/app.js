@@ -97,7 +97,10 @@ function launchApp() {
         el: document.getElementById('contextual-content-main')
     });
 
-
+    // Hide the loader
+    $('#loading-overlay').fadeOut( 300 , function () {
+        $(this).remove();
+    });
 
     console.log('Ready');
 }

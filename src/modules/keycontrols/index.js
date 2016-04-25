@@ -34,18 +34,22 @@ var KEYS = {
  * @param e: Event fired by the listener
  **/
 function testKeyEvent(e) {
-    var key = _.invert(KEYS)[e.which];
-    if (key) {
+    if (e.target.nodeName.toLowerCase() !== 'input') {
+        var key = _.invert(KEYS)[e.which];
+        if (key) {
 
-        e.preventDefault();
-        dispatcher.trigger('keycontrols:keypressed', key);
+            e.preventDefault();
+            dispatcher.trigger('keycontrols:keypressed', key);
+        }
     }
 }
 
 function preventDefaults(e) {
     var key = _.invert(KEYS)[e.which];
     if (key) {
+        if(key === 'NUDGE_LEFT' || key === 'NUDGE_RIGHT') {
         e.preventDefault();
+        }
     }
 }
 

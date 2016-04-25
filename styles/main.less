@@ -1,123 +1,119 @@
+/** Global **/
 * {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
 }
 
 html {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-    background: -webkit-linear-gradient(#272927, #CC0052);
-    background: linear-gradient(#272927, #CC0052);
-    color: #666;
-    font-family: monospace;
+  background: -webkit-linear-gradient(#272927, #CC0052);
+  background: linear-gradient(#272927, #CC0052);
+  color: #666;
+  font-family: monospace;
 }
+
+/** Header **/
+
+#header {
+
+  height: 70px;
+
+
+  #logo {
+    height: 70px;
+    width: 234px;
+    background: url(../assets/img/logo.png) no-repeat center center;
+    background-size: contain;
+  }
+
+}
+
+
+
+/** Main Content **/
 
 #main-content {
-    position: absolute;
-    top: 70px;
-    bottom: 285px; /* this should always be 50px more than #contextual-content.height */
-    left: 0px;
-    right: 0px;
-    overflow: scroll;
-}
+  position: absolute;
+  top: 70px;
+  bottom: 285px; /* this should always be 50px more than #contextual-content.height */
+  left: 0px;
+  right: 0px;
+  overflow: scroll;
+  overflow-y: hidden;
 
-#contextual-content {
-    position: absolute;
-    bottom: 50px;
-    left: 0px;
-    right: 0px;
-    height: 235px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+  /** Timeline **/
 
-    background-color: #000;
-}
-
-#contextual-content-handle {
-    width: 100%;
-    height: 15px;
-    background: url(../assets/img/handle.png) no-repeat center center;
-    cursor: row-resize;
-}
-
-footer {
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-
-    height: 50px;
-
-    background-color: #fff;
-}
-
-footer p {
-    line-height: 50px;
-}
-
-/** Timeline **/
-
-.timeline {
-    min-width: 100%;
+  #timeline {
     min-height: 100%;
     position: relative;
-    background-color: #222222;
-}
 
-.timeline-markers {
+    background: url(../assets/img/carbon-bg.png) repeat scroll;
+
+  }
+
+  .timeline-markers {
     height: 15px;
     position: absolute;
     top: 0;
     right: 0px;
     left: 0px;
-}
 
-.timeline-marker {
-    margin: 0;
-    padding: 1px;
-    width: 10%;
-    height: 15px;
-    float: left;
+    background-color: #000;
 
-    font-size: 10px;
-    text-align: left;
-    color: #cccccc;
+    z-index: 100;
 
-    background: -webkit-linear-gradient(#333, #222);
-    background: linear-gradient(#333, #222);
+    .timeline-marker {
+      margin: 0;
+      padding: 1px;
+      width: 10%;
+      height: 15px;
+      float: left;
 
-    border: 1px solid #555;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-}
+      font-size: 10px;
+      text-align: left;
+      color: #cccccc;
 
-#timeline-tracks {
+      background: -webkit-linear-gradient(#333, #222);
+      background: linear-gradient(#333, #222);
+
+      border: 1px solid #555;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+    }
+  }
+
+  #timeline-tracks {
     position: absolute;
     top:0px;
     bottom: 0px;
     left: 0px;
     right: 0px;
-}
 
-#playhead {
+    overflow-y: scroll;
+
+    z-index: 90;
+  }
+
+  #playhead {
     width: 2px;
     background-color: #CC0052;
     position: absolute;
     top:15px;
     bottom:0px;
     z-index: 100;
-}
+  }
 
-/** Tracks **/
+  /** Tracks **/
 
-.track {
+  .track {
     position: absolute;
 
     background: -webkit-linear-gradient(#0086b3, #2255ff);
@@ -129,19 +125,87 @@ footer p {
     -webkit-box-sizing: border-box;
 
     &.dragging {
-        opacity: 0.99;
+      opacity: 0.99;
     }
     &.selected {
-        border: 1px solid #985f0d;
+      border: 1px solid #985f0d;
     }
+  }
+
 }
 
-/** Browser **/
+/** Contextual Content **/
 
-.browser-item {
-    width: auto !important;
-    padding: 5px 10px;
-    margin-right: 10px;
-    float: left;
+#contextual-content {
+
+  position: absolute;
+  bottom: 50px;
+  left: 0px;
+  right: 0px;
+  height: 235px;
+  overflow: hidden;
+
+  background-color: #000;
+
+  #contextual-content-handle {
+    width: 100%;
+    height: 15px;
+    background: url(../assets/img/handle.png) no-repeat center center;
+    cursor: row-resize;
+
+    position: relative;
+
+    z-index: 100;
+  }
+
+  #contextual-content-main {
+    overflow: auto;
+
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
+    padding-top: 15px;
+
+    z-index: 90;
+
+    /** Browser **/
+
+      .browser-item {
+        height: 74px;
+        width: auto !important;
+        padding: 5px 10px;
+        margin: 0 10px 10px 0;
+        float: left;
+      }
+
+  }
+
+
+
+
+
 }
+
+/** Footer **/
+
+footer {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  height: 50px;
+
+  background-color: #fff;
+}
+
+footer p {
+  line-height: 50px;
+}
+
+
+
 

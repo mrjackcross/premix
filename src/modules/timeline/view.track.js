@@ -40,6 +40,8 @@ var TrackView = Backbone.View.extend({
 
         this.$track.css("left", PremixGlobals.timeToPixels(this.model.attributes.trackStartTime));
         this.$track.css("top", this.model.attributes.yPos);
+        this.$track.css("width", PremixGlobals.timeToPixels(this.model.attributes.trackLength));
+
 
         if(!this.trackAdded) {
             var trackData = {
@@ -109,9 +111,14 @@ var TrackView = Backbone.View.extend({
 
         this.$track.addClass('dragging');
 
+        var yOffset = e.clientY - this.$track.offset().top;
+        var xOffset = e.clientX - this.$track.offset().left;
+
         return {
             type: 'timelineTrack',
-            model: this.model.attributes
+            model: this.model.attributes,
+            yOffset: yOffset,
+            xOffset: xOffset
         }
     } // override me, return data to be bound to drag
 

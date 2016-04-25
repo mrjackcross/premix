@@ -1,0 +1,31 @@
+#loading-overlay {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
+    background-color: #fff;
+
+    z-index: 9999;
+}
+
+#loading-overlay h1 {
+    width: 500px;
+    text-align: center;
+    margin: 300px auto 20px;
+
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 32px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
+#loader {
+    width: 150px;
+    height: 150px;
+    margin: 0px auto 20px;
+
+    background: url(../assets/img/loader.gif) no-repeat center center;
+    background-size: auto;
+}

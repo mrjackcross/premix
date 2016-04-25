@@ -14,7 +14,6 @@ var BrowserView = require('./view.browser');
  **/
 function init(options) {
     console.log('Browser init');
-
     new BrowserView(options).render();
 }
 

@@ -19,7 +19,6 @@ var TimelineView = Backbone.View.extend({
     initialize: function (options) {
 
         this.collection = new TimelineTrackCollection();
-        this.listenTo( this.collection, 'add', this.render );
 
         this.listenTo(dispatcher, 'timeline:stepchanged', this.stepChanged);
         this.listenTo(dispatcher, 'timeline:tracknudged', this.trackMoved);
@@ -65,24 +64,29 @@ var TimelineView = Backbone.View.extend({
 
         var $tel = this.$el.find('#timeline-tracks');
 
+        // Hardcode to 30 seconds for now as we are only getting previews
+        // var trackLength = trackData.duration_ms / 1000.0;
+        var trackLength = 30.0;
+
         var track = new TimelineTrackModel({
-            name: trackData.name,
-            trackId: trackData.trackId + '-' + this.uniqueId++,
-            url: trackData.url,
+            name: trackData.artists[0].name + trackData.name,
+            trackId: 'track-' + trackData.id + '-' + this.uniqueId++,
+            url: trackData.preview_url,
             yPos: trackData.yPos,
             trackStartTime: trackData.startTime,
-            trackLength: trackData.trackLength
-        });
+            trackLength: trackLength
+    });
 
         this.collection.add(track);
 
-        // var trackView = new TrackView({
-        //     model: track,
-        //     el: $tel
-        // });
-        //
-        // this.$el.append(trackView.render().el);
+        var trackView = new TrackView({
+            model: track,
+            el: $tel
+        });
 
+        this.$el.append(trackView.render().el);
+
+        this.trackViews.push(trackView);
     },
     trackMoved: function(trackMoveData) {
 
@@ -95,7 +99,8 @@ var TimelineView = Backbone.View.extend({
                     yPos: trackMoveData.yPos
                 });
 
-                trackView.render();
+                trackView.$track.css("left", PremixGlobals.timeToPixels(trackView.model.attributes.trackStartTime));
+                trackView.$track.css("top", trackView.model.attributes.yPos);
             }
 
         });
@@ -163,8 +168,8 @@ var TimelineView = Backbone.View.extend({
                 this.addTrack(data.model);
                 break;
             case 'timelineTrack':
-                data.model.yPos = e.clientY - this.$el.offset().top;
-                data.model.startTime = PremixGlobals.pixelsToTime(e.clientX + this.$el.scrollLeft());
+                data.model.yPos = (e.clientY - this.$el.offset().top) - data.yOffset;
+                data.model.startTime = PremixGlobals.pixelsToTime(((e.clientX + this.$el.scrollLeft()) - this.$el.offset().left) - data.xOffset);
                 this.trackMoved(data.model);
                 break;
             default:
