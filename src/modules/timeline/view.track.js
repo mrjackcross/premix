@@ -31,7 +31,7 @@ var TrackView = Backbone.View.extend({
 
         this.$el.append(rawHTML);
 
-        this.$track = this.$el.find("#" + this.model.attributes.trackId);
+        this.$track = this.$el.find("#" + this.model.attributes.trackId).parent('.track-container');
 
         this.$track.attr("draggable", "true");
         this.$track.bind("dragstart", _.bind(this._dragStartEvent, this));

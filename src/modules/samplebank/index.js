@@ -40,6 +40,7 @@ function loadSample(trackData) {
     var wavesurfer = WaveSurfer.create({
         audioContext: AUDIO,
         container: '#' + trackData.trackId,
+        height: PremixGlobals.getWavesurferHeight(),
         interact: false,
         fillParent: false,
         minPxPerSec: PremixGlobals.getPixelsPerSecond()

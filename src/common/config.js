@@ -12,7 +12,8 @@ var PremixGlobals = {
     pixelsPerSecond: 10,
     lookahead: 0.100,
     nudgeAmount: 0.010,
-    
+    wavesurferHeight: 70,
+
     // Getter/Setters
     getTotalTime: function () {
         return this.totalTime;
@@ -21,13 +22,16 @@ var PremixGlobals = {
         return this.pixelsPerSecond;
     },
     getLookahead: function () {
-      return this.lookahead;
+        return this.lookahead;
     },
     getNudgeAmount: function() {
-      return this.nudgeAmount;
+        return this.nudgeAmount;
     },
     getTimelineWidth: function() {
         return this.getTotalTime() * this.getPixelsPerSecond();
+    },
+    getWavesurferHeight: function() {
+        return this.wavesurferHeight;
     },
 
     // Util Methods
