@@ -64,18 +64,25 @@ var TimelineView = Backbone.View.extend({
 
         var $tel = this.$el.find('#timeline-tracks');
 
-        // Hardcode to 30 seconds for now as we are only getting previews
-        // var trackLength = trackData.duration_ms / 1000.0;
-        var trackLength = 30.0;
+        var trackLength = trackData.trackLength / 1000.0;
+        var bpm = trackData.trackBpm;
+        var url = trackData.trackUrl;
+
+        // Use the 30 second preview if the full track isn't available
+        if(trackData.trackUrl === 'Not Available') {
+            url = trackData.trackPreviewUrl;
+            trackLength = 30;
+        }
 
         var track = new TimelineTrackModel({
-            name: trackData.artists[0].name + trackData.name,
+            name: trackData.trackArtist + ' - ' + trackData.trackName,
             trackId: 'track-' + trackData.id + '-' + this.uniqueId++,
-            url: trackData.preview_url,
+            url: url,
             yPos: trackData.yPos,
             trackStartTime: trackData.startTime,
-            trackLength: trackLength
-    });
+            trackLength: trackLength,
+            bpm: bpm
+        });
 
         this.collection.add(track);
 

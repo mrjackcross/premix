@@ -15,7 +15,7 @@ var BrowserItemView = Backbone.View.extend({
     },
     render: function () {
 
-        var imageUrl = this.model.attributes.album.images[2].url;
+        var imageUrl = this.model.attributes.trackImageUrl;
         var img = '<img src="' + imageUrl + '" />';
 
         var rawHTML = _template({

@@ -3,7 +3,8 @@ var dispatcher = require('dispatcher'),
     AUDIO = require('../../common/audiocontext'),
     WaveSurfer = require('../../../lib/wavesurfer.js-master/dist/wavesurfer.min.js'),
     //WaveSurfer = require('wavesurfer.min.js'),
-    PremixGlobals = require('../../common/config');
+    PremixGlobals = require('../../common/config'),
+    Properties = require('../../common/properties');
 
 
 /**
@@ -25,9 +26,7 @@ var dispatcher = require('dispatcher'),
  **/
 
 
-var fxNode = null,
-    wavesurfers = {};
-
+var wavesurfers = {};
 /**
  * Loads a sample via XHR and triggers a 'ready' event if
  * it's the last one to load.
@@ -43,19 +42,37 @@ function loadSample(trackData) {
         height: PremixGlobals.getWavesurferHeight(),
         interact: false,
         fillParent: false,
-        minPxPerSec: PremixGlobals.getPixelsPerSecond()
+        minPxPerSec: PremixGlobals.getPixelsPerSecond() / PremixGlobals.getSyncModifier(trackData.bpm)
     });
+
+    // Inject some Premix variables into our wavesurfer objects
+    wavesurfer.premixTrackInfo = {
+      bpm: trackData.bpm
+    };
 
     wavesurfers[trackData.trackId] = wavesurfer;
 
-    wavesurfer.load(trackData.url);
+
+    var audioUrl = trackData.url;
+
+    // Check if audio is full or preview
+    if(audioUrl.indexOf('ribob03') > -1) {
+        audioUrl = getProxiedAudioUrl(audioUrl, function(proxiedUrl) {
+            wavesurfer.load(proxiedUrl);
+        });
+    } else{
+        wavesurfer.load(audioUrl);
+    }
+
 
     wavesurfer.on('ready', function () {
         dispatcher.trigger('samplebank:sampleloaded', trackData.trackId);
+
+        // Testing speed change works
+        setPlaybackSpeed();
     });
 
 }
-
 
 /**
  * Triggers a sample to play by creating a new source node
@@ -104,7 +121,7 @@ function stopSamples() {
     }
 }
 
-function playPauseSamples() {
+function pauseSamples() {
     for (var i in wavesurfers) {
         if (wavesurfers.hasOwnProperty(i)) {
             wavesurfers[i].pause();
@@ -112,17 +129,28 @@ function playPauseSamples() {
     }
 }
 
-
-/**
- * Stores a reference to a node that we will inline, if
- * present, when playing sounds via playSample().
- *
- * @param node: Node instance, or null
- **/
-function setFxNode(node) {
-    fxNode = node;
+function setPlaybackSpeed() {
+    for (var i in wavesurfers) {
+        if (wavesurfers.hasOwnProperty(i)) {
+            var playbackRate = PremixGlobals.getSyncModifier(wavesurfers[i].premixTrackInfo.bpm);
+            wavesurfers[i].setPlaybackRate(playbackRate);
+        }
+    }
 }
 
+/**
+ * Gets around CORS as we don't have access to the 
+ * audio server
+ * @param contentUrl The destination url
+ * @param callback
+ */
+function getProxiedAudioUrl(contentUrl, callback) {
+
+    $.getJSON(contentUrl, function(data) {
+        callback( data['value'].replace('https:\/\/' + Properties.omniContentUrl, PremixGlobals.getStudioHost() + ':' + PremixGlobals.getStudioProxyPort()));
+    });
+
+}
 
 /**
  * Module init.
@@ -134,8 +162,7 @@ function init() {
     console.log('SampleBank init');
     dispatcher.on('samplebank:playsample', playSample);
     dispatcher.on('samplebank:stopsamples', stopSamples);
-    dispatcher.on('samplebank:playpausesamples', playPauseSamples);
-    dispatcher.on('samplebank:setfxnode', setFxNode);
+    dispatcher.on('samplebank:pausesamples', pauseSamples);
     dispatcher.on('samplebank:loadsample', loadSample);
     dispatcher.trigger('samplebank:ready');
 }

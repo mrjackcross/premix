@@ -12,7 +12,13 @@ var PremixGlobals = {
     pixelsPerSecond: 10,
     lookahead: 0.100,
     nudgeAmount: 0.010,
-    wavesurferHeight: 70,
+    masterTempo: 140,
+    wavesurferHeight: 50,
+    studioHost: 'http://localhost',
+    studioBasePath: '/api/v1/',
+    studioPort: 10010,
+    studioProxyPort: 8000,
+
 
     // Getter/Setters
     getTotalTime: function () {
@@ -30,8 +36,23 @@ var PremixGlobals = {
     getTimelineWidth: function() {
         return this.getTotalTime() * this.getPixelsPerSecond();
     },
+    getMasterTempo: function() {
+        return this.masterTempo;
+    },
     getWavesurferHeight: function() {
-        return this.wavesurferHeight;
+        return this.wavesurferHeight
+    },
+    getStudioHost: function() {
+        return this.studioHost;
+    },
+    getStudioBasePath: function() {
+        return this.studioBasePath;
+    },
+    getStudioPort: function() {
+      return this.studioPort;
+    },
+    getStudioProxyPort: function() {
+        return this.studioProxyPort;
     },
 
     // Util Methods
@@ -40,6 +61,17 @@ var PremixGlobals = {
     },
     timeToPixels: function (timeVal) {
         return (timeVal / this.getTotalTime()) * this.getTimelineWidth();
+    },
+    /**
+     * Given a bpm
+     * returns the playback rate required
+     * to sync bpm with master.
+     * 1 is normal speed, 0 is stopped,
+     * 2 is double speed etc.
+     * @param bpm of track to sync
+     */
+    getSyncModifier: function (bpm) {
+        return this.getMasterTempo() / bpm;
     }
 };
 

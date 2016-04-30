@@ -40,7 +40,10 @@ var TrackView = Backbone.View.extend({
 
         this.$track.css("left", PremixGlobals.timeToPixels(this.model.attributes.trackStartTime));
         this.$track.css("top", this.model.attributes.yPos);
-        this.$track.css("width", PremixGlobals.timeToPixels(this.model.attributes.trackLength));
+
+        var trackWidth = PremixGlobals.timeToPixels(this.model.attributes.trackLength
+                            / PremixGlobals.getSyncModifier(this.model.attributes.bpm));
+        this.$track.css("width", trackWidth);
 
 
         if(!this.trackAdded) {
@@ -49,7 +52,8 @@ var TrackView = Backbone.View.extend({
                 url: this.model.attributes.url,
                 trackStartTime: this.model.attributes.trackStartTime,
                 $el: this.$el,
-                trackLength: this.model.attributes.trackLength
+                trackLength: this.model.attributes.trackLength,
+                bpm: this.model.attributes.bpm
             };
 
             dispatcher.trigger('timeline:trackadded', trackData);

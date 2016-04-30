@@ -2,3 +2,4 @@ node_modules/
 assets/samples/
 .idea/
 premix.iml
+/src/common/properties.js

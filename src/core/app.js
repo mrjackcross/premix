@@ -52,7 +52,7 @@ function launchApp() {
     // Bind some connecting events to 'wire up' our modules
     proxyEvents({
         'timeline:audiohit': 'samplebank:playsample',
-        'timeline:paused': 'samplebank:stopsamples',
+        'timeline:paused': 'samplebank:pausesamples',
         'timeline:reset': 'samplebank:stopsamples',
         'timeline:trackadded': 'samplebank:loadsample',
         'samplebank:sampleloaded:': 'timeline:sampleloaded'
