@@ -50,7 +50,7 @@ function trackMoved(trackInfo) {
         tracks[trackInfo.trackId].played = false;
     }
 
-    if(isPlaying) {
+    if(tracks[trackInfo.trackId].isPlaying) {
         stop();
         play();
     }

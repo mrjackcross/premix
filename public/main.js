@@ -14149,7 +14149,9 @@
 	function pauseSamples() {
 	    for (var i in wavesurfers) {
 	        if (wavesurfers.hasOwnProperty(i)) {
-	            wavesurfers[i].pause();
+	            if(wavesurfers[i].isPlaying()) {
+	                wavesurfers[i].pause();
+	            }
 	        }
 	    }
 	}
@@ -15991,7 +15993,7 @@
 	        tracks[trackInfo.trackId].played = false;
 	    }
 	
-	    if(isPlaying) {
+	    if(tracks[trackInfo.trackId].isPlaying) {
 	        stop();
 	        play();
 	    }
